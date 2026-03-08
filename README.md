@@ -25,6 +25,10 @@ Verwendet wird:
 8. Nikolai kontrolliert die Änderungen
 9. Nikolai merged die Änderungen des branch in die main
 
+Sonstiges:
+- Immer Fortschritt durch commit und push sichern
+- Immer vor dem Coden die aktuellsten Änderungen an der Codbase pullen
+
 # Git Regeln:
 1. NIEMALS auf die main pushen oder auf der main arbeiten!
 2. NIEMALS auf die main pushen oder auf der main arbeiten!
