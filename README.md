@@ -43,7 +43,7 @@ Sonstiges:
    - git push origin [BRANCH_NAME]
 8. Nicht gleichzeitig denselben Abschnitt derselben .Rmd bearbeiten!
 9. Keine Panik falls etwas nicht funktioniert oder ihr euer lokales Git zerstört habt:
-   - Bescheid geben und bei Nikolai nachfragen was zu tun ist
+   - Bescheid geben und bei eurem allmächtigen Git Overlord nachfragen was zu tun ist
    - In solchen Fällen bitte, bitte nicht irgendwelche von LLM erstellte git commands ausführen
    - Git ist sehr mächtig und es gibt viele commands die auf den ersten Blick ähnliche Sachen machen, aber im Hintergrund die Branchstruktur verändern können ohne dass ihr es mitkriegt.
 10. Bitte nicht die Ordnerstruktur oder etwas an .gitignore oder renv.lock ändern
