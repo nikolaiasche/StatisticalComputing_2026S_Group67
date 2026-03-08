@@ -4,9 +4,9 @@ Git repository für Assignments 1 bis 4.
 Verwendet wird R, R-Markdown, tidyverse, ggplo2 und shiny sowie Latex für etwaige mathematischen Formeln.
 
 # Gruppe 67:
-Crasnianec Oliver
-Kovsca Lorenz
-Asche Nikolai
+- Crasnianec Oliver
+- Kovsca Lorenz
+- Asche Nikolai
 
 # Git Workflow:
 1. Subtasks werden aufgeteilt
