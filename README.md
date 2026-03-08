@@ -35,7 +35,7 @@ Verwendet wird:
    - git pull origin [BRANCH_NAME]
 7. Nach Änderungen:
    - git add.
-   - git commit -m "[Kurze Beschreibung der Änderungen]
+   - git commit -m "[Kurze Beschreibung der Änderungen]"
    - git push origin [BRANCH_NAME]
 8. Nicht gleichzeitig denselben Abschnitt derselben .Rmd bearbeiten!
 9. Keine Panik falls etwas nicht funktioniert oder ihr euer lokales Git zerstört habt:
