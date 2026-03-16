@@ -13,9 +13,14 @@ knitr::opts_chunk$set(echo = TRUE)
 *The  .Rmd and .html (alternatively the .pdf) should be uploaded in TUWEL by the deadline. Refrain from using explanatory comments in the R code chunks but write them as text instead. Please consider the AI Guidelines as specified in the organizational slides (you can use the table). Points will be deducted if the submitted file is not in a decent form; answers should be answering the concrete questions and not discuss topics in general - please be mindful of our tutors' time and the size of the course. *
 
 
+<<<<<<< HEAD
 
 \begin{table}[ht]
 \centering  
+=======
+\begin{table}[ht]
+\centering
+>>>>>>> dcec62f46d5ee1386db33b47e829c653d8aee131
 \caption{You can use and extend this table to specify your AI usage (if used at all).}
 \begin{tabular}{l|rrr}
 \toprule
@@ -46,7 +51,10 @@ Benchmark the two functions for $n=200$ and $n=2000$ (you can use package **micr
 Plot the sequence for  $n=100$. 
 For which $n$ does it start to stabilize to a value?
 What number does the sequence converge to?
+<<<<<<< HEAD
 Rapid
+=======
+>>>>>>> dcec62f46d5ee1386db33b47e829c653d8aee131
 
 # 2. Gamma function (1 point)
 
