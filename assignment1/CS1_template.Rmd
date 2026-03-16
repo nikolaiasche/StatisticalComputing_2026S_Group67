@@ -45,6 +45,7 @@ Benchmark the two functions for $n=200$ and $n=2000$ (you can use package **micr
 Plot the sequence for  $n=100$. 
 For which $n$ does it start to stabilize to a value?
 What number does the sequence converge to?
+Rapid
 
 # 2. Gamma function (1 point)
 
