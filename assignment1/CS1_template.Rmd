@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 \begin{table}[ht]
-\centering
+\centering  
 \caption{You can use and extend this table to specify your AI usage (if used at all).}
 \begin{tabular}{l|rrr}
 \toprule
