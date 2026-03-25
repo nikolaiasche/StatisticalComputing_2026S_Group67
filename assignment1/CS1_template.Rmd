@@ -110,6 +110,8 @@ $[-\epsilon,\epsilon]$ is less than 0.05. Use $\epsilon = 0.01$.
 
 ## f. 
 
+gitgit
+
 - Repeat the analysis in b, but instead of simulating from a 
 discrete uniform distribution, simulate from a continuous standard cauchy distribution using `rcauchy()`. The (standard) cauchy distribution arises from  the ratio of two independent 
 mean zero (standard) normally distributed random variables.
