@@ -54,17 +54,48 @@ using the `gamma` function in base R.
 $$
 \rho_n =\frac{\Gamma((n-1)/2)}{\Gamma(1/2)\Gamma((n - 2)/2)}
 $$
+```{r}
+gamma_compute <- function(n){
+  rho <- gamma((n-1)/2) / (gamma(1/2) * gamma((n-2)/2))
+  return(rho)
+}
+```
 
 ## b. 
 
 Try $n = 2000$. What do you observe? Why do you think the observed behavior happens?
 
+```{r}
+gamma_compute(2000)
+```
+We see that the call to the function returns "Not a Number". This is because `gamma(1000)=1000!` is significantly larger than the largest number R can handle, therefore the function tires to devide infinity by infinity, which returns "NaN"!
+
 ## c.
 Write an implementation which can also deal with large values of $n>1000$. 
+
+In order to do that, we use `lgamma()`, which returns the logarithm of the gamma function, which keeps the numbers involved smaller and turns the division in to a subtraction. At the end we exponentiate everything in order to get the true value:
+
+```{r}
+gamma_compute_large <- function(n){
+  log_result <-lgamma((n - 1) / 2) - lgamma(1 / 2) - lgamma((n - 2) / 2)
+  return(exp(log_result))
+}
+
+gamma_compute_large(2000)
+```
+
 
 ## d. 
 Plot $\rho_n/\sqrt{n}$ for different values of $n$. Can you guess the limit of $\rho_n/\sqrt{n}$ for $n \rightarrow\infty$?
 
+```{r}
+N <- seq(1,2000, by = 10)
+
+plot(N, gamma_compute_large(N)/sqrt(N), type = "l", col = "red", ylab = expression(rho[n]/sqrt(n)), xlab = "n", main = "Asymptotic limit")
+#curve(log(x), add = TRUE, col="blue")
+```
+
+It seems to converge to approximately $0.4$.
 
 # 3. Weak law of large numbers (1.5 points)
 
