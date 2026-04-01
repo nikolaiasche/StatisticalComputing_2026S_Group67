@@ -54,17 +54,48 @@ using the `gamma` function in base R.
 $$
 \rho_n =\frac{\Gamma((n-1)/2)}{\Gamma(1/2)\Gamma((n - 2)/2)}
 $$
+```{r}
+gamma_compute <- function(n){
+  rho <- gamma((n-1)/2) / (gamma(1/2) * gamma((n-2)/2))
+  return(rho)
+}
+```
 
 ## b. 
 
 Try $n = 2000$. What do you observe? Why do you think the observed behavior happens?
 
+```{r}
+gamma_compute(2000)
+```
+We see that the call to the function returns "Not a Number". This is because `gamma(1000)=1000!` is significantly larger than the largest number R can handle, therefore the function tires to devide infinity by infinity, which returns "NaN"!
+
 ## c.
 Write an implementation which can also deal with large values of $n>1000$. 
+
+In order to do that, we use `lgamma()`, which returns the logarithm of the gamma function, which keeps the numbers involved smaller and turns the division in to a subtraction. At the end we exponentiate everything in order to get the true value:
+
+```{r}
+gamma_compute_large <- function(n){
+  log_result <-lgamma((n - 1) / 2) - lgamma(1 / 2) - lgamma((n - 2) / 2)
+  return(exp(log_result))
+}
+
+gamma_compute_large(2000)
+```
+
 
 ## d. 
 Plot $\rho_n/\sqrt{n}$ for different values of $n$. Can you guess the limit of $\rho_n/\sqrt{n}$ for $n \rightarrow\infty$?
 
+```{r}
+N <- seq(1,2000, by = 10)
+
+plot(N, gamma_compute_large(N)/sqrt(N), type = "l", col = "red", ylab = expression(rho[n]/sqrt(n)), xlab = "n", main = "Asymptotic limit")
+#curve(log(x), add = TRUE, col="blue")
+```
+
+It seems to converge to approximately $0.4$.
 
 # 3. Weak law of large numbers (1.5 points)
 
@@ -299,11 +330,76 @@ kwtest <- function (x, g, ...)
 ## a. 
 Write a pseudo code outlining what the function does.
 
+*Input:* dataset $x$ (either list or vector) and grouping factor $g$ (optional when x is a list)
+
+1. *Input Validation and Transformation* 
+check if $x$ is a list
+  - if yest: check if it has at least 2 elements.If not, stop. If yes proceed to create the grouping factor $g$, each element of the list representing one group. Then, transform the list to a single numeric vector. 
+  - if no: check if the total number of observations $n = |x|$ equals the length of $g$. If not, stop. If yes, transform $g$ to a factor and check if in each level there at least 2 observations. If not, stop
+  
+2. *Rank Computation and Tie Identification* 
+  - Compute the ranks $r = (r_1, r_2, \dots, r_n)$ for each observation in $x$, assigning the average rank to tied values.
+  - Construct a frequency table $T$ containing the counts of each unique value in $x$ to identify tied observations.
+  
+3. *Test Statistic Calculation*
+  - For each group $i \in \{1, \dots, k\}$, compute the sum of ranks $R_i = \sum_{j \in \text{group } i} r_j$ and let $n_i$ be the number of observations in group $i$.
+  - Compute the unadjusted Kruskal-Wallis statistic $S$:
+  
+    $$S = \sum_{i=1}^k \frac{R_i^2}{n_i}$$
+  
+  - Apply the tie-correction factor to compute the final Kruskal-Wallis test statistic $H$:
+  
+    $$H=\frac{\frac{12}{n(n+1)}S-3(n+1)}{1-\frac{\sum_{t \in T}(t^3-t)}{n^3-n}}$$
+4. *P-value Computation*
+  - Calculate the degrees of freedom $v = k - 1$.
+  - Calculate the $p$-value using the right tail of the Chi-squared CDF with $v$ degrees of freedom:
+  
+    $$p\text{-value} = 1 - F_{\chi^2_v}(H)$$
+
+*Output:* A list containing the test statistic H, the degrees of freedom $v$ and the p-value.
+
 ## b. 
 For example data, call the function in two ways: once using `x` as a list and once using `x` as a vector with a corresponding `g` argument. Ensure that the two different function calls return the same thing by aligning the inputs.
 
+```{r}
+set.seed(1899)
+sample1 = rnorm(100, 4,1)
+sample2 = rnorm(100,5,1)
+sample3 = rnorm(100,5,2)
+x_list <- list(sample1 = sample1, sample2 = sample2, sample3 = sample3)
+x_vec <- c(sample1, sample2, sample3)
+g <- rep(1:3, each = 100)
+kwtest(x_list)
+kwtest(x_vec, g)
+```
+
+We see, the results are identical.
+
 ## c. 
 Make a faster version of `kwtest()` that only computes the Kruskal-Wallis  **test statistic** when the input is a numeric variable `x` and a variable `g` which gives the group membership. You can try simplifying the function above or by coding from the mathematical definition (see https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance). This function should also perform some checks to ensure the correctness of the inputs (use `kwtest()` as inspiration).
+
+```{r}
+kw_fast <- function(x, g) {
+  n <- length(x)
+  if (!is.numeric(x)) stop("x must be a numeric vector!")
+  if (n != length(g)) stop("'x' and 'g' must have the same length")
+  if (n < 2L) stop("not enough observations")
+  g <- as.factor(g)
+  k <- nlevels(g)
+  if (k < 2L) stop("all observations are in the same group")
+  r <- rank(x)
+  rank_sums <- rowsum(r, g)
+  group_lengths <- tabulate(g)
+  STAT <- sum(rank_sums^2 / group_lengths)
+  TIES <- table(x)
+  STAT <- ((12 * STAT / (n * (n + 1)) - 3 * (n + 1)) / 
+          (1 - sum(TIES^3 - TIES) / (n^3 - n)))
+  names(STAT) <- "Kruskal-Wallis chi-squared"
+  return(STAT)
+}
+kw_fast(x_vec, g)
+```
+We see our new function returns the same test statistic as in part b. We use optimized functions for counting: `rowsum()` and `tabulate()` instead of the slower but more flexible `tapply()`.
 
 ## d. 
 Consider the following scenario. You have samples available from multiple experiments $m=1000$ where you collect the numerical values for the quantity of interest `x` and the group membership for $n$ individuals. The first $20$ individuals in each sample belong to group 1, the following $20$ individuals in each sample belong to group 2, the last $10$ individuals in each sample belong to group 3. Use the following code to simulate such a data structure:
@@ -316,15 +412,84 @@ grp <- rep(1:3, c(20, 20, 10))
 ```
   Write a function which performs the Kruskal-Wallis test using the function             `stats:::kruskal.test.default()` for $m$ repeated experiments and returns a vector of $m$ test statistics. The input of this function are a matrix `X` with $m$ rows and $n$ columns and a vector `g` which gives the grouping. 
 
+```{r}
+kw_default <- function(X,g) {
+  apply(X, 1, function(y) {stats:::kruskal.test.default(y, g)$statistic})
+}
+head(kw_default(X,grp))
+```
+
 
 ## e. 
 Write a function which performs the Kruskal-Wallis test using the function in point c. for $m$ repeated experiments and returns a vector of $m$ test statistics.
 The input of this function are a matrix `X` with $m$ rows and $n$ columns and a vector `g` which gives the grouping. 
 
+```{r}
+kw_fast_multiple <- function(X,g) {
+  apply(X, 1, function(y) {kw_fast(y,g)})
+}
+head(kw_fast_multiple(X,grp))
+```
+The to implementations return the same test statistics, as expected.
+
 ## f. 
 Compare the performance of the two approaches using a benchmarking package on the data generated above. Comment on the results.
+
+```{r}
+library(microbenchmark)
+
+bench_results <- microbenchmark(default_R = kw_default(X,grp),
+                                fast_custom = kw_fast_multiple(X, grp),
+                                times = 10)
+print(bench_results)
+```
+Our custom implementation is indeed significantly faster than the base R implementation (about 70 milliseconds on average). This is because we used highly optimized functions and skip the formatting and p-value computation. 
 
 ## g. 
 Now consider vectorizing the function in point c. Compare this approach to the other two.
 Comment on the results.
+
+```{r}
+kw_fast_vector <- function(X,g) {
+  if (!is.matrix(X) || !is.numeric(X)) stop("X must be a numeric matrix!")
+  n <- ncol(X)
+  if (n != length(g)) stop("The number of columns in 'X' must equal the length of 'g'")
+  if (n < 2L) stop("not enough observations")
+  
+  g <- as.factor(g)
+  if (nlevels(g) < 2L) stop("all observations are in the same group")
+  
+  R <- t(apply(X, 1, rank))
+  
+  D <- model.matrix(~ 0 + g) 
+  rank_sums <- R %*% D
+  
+  group_lengths <- tabulate(g)
+  STAT_base <- rowSums(sweep(rank_sums^2, 2, group_lengths, "/"))
+  H_unadj <- (12 * STAT_base / (n * (n + 1))) - 3 * (n + 1)
+  
+  tie_sums <- apply(X, 1, function(row_data) {
+    if (anyDuplicated(row_data)) {
+      ties <- tabulate(match(row_data, unique(row_data)))
+      sum(ties^3 - ties)
+    } else {
+      0 
+    }
+  })
+
+  tie_correction <- 1 - tie_sums / (n^3 - n)
+  
+  STAT <- H_unadj / tie_correction
+  
+  return(STAT)
+}
+head(kw_fast_vector(X,grp))
+
+bench_results_2 <- microbenchmark(default_R = kw_default(X,grp),
+                                fast_custom = kw_fast_multiple(X, grp),
+                                fast_custom_vec = kw_fast_vector(X, grp),
+                                times = 10)
+print(bench_results_2)
+```
+This implementation is by far the fastest, since R handles vectorized operation very well this is not a surprise (the extreme difference however was a surprise).
 
