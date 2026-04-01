@@ -38,13 +38,96 @@ Write two different R functions which return the sequence $r_{i}=F_{i+1}/F_i$
 for $i=1,\ldots,n$ where $F_i$ is the $i$th Fibonacci number, once using `for`
 and once using `while`.
 
+```{r}
+fibonacci_for_loop <- function(n){
+  F <- numeric(n + 1)
+  F[1] <- 1
+  F[2] <- 1
+  
+  if (n >= 2) {
+    for (i in 3:(n + 1)) {
+      F[i] <- F[i - 1] + F[i - 2]
+    }
+  }
+  
+  r <- numeric(n)
+  for (i in 1:n) {
+    r[i] <- F[i + 1] / F[i]
+  }
+  
+  r
+}
+
+fibonacci_while_loop <- function(n){
+  F <- numeric(n + 1)
+  F[1] <- 1
+  F[2] <- 1
+  
+  i <- 3
+  while (i <= n + 1) {
+    F[i] <- F[i - 1] + F[i - 2]
+    i <- i + 1
+  }
+  
+  r <- numeric(n)
+  i <- 1
+  while (i <= n) {
+    r[i] <- F[i + 1] / F[i]
+    i <- i + 1
+  }
+  r
+}
+```
+
+
 ## b. 
 Benchmark the two functions for $n=200$ and $n=2000$ (you can use package **microbenchmark** or package **bench** for this purpose). Which function is faster?
+
+```{r}
+library(microbenchmark)
+
+microbenchmark(
+  fibonacci_for_loop(200),
+  fibonacci_while_loop(200),
+  times = 100
+)
+
+microbenchmark(
+  fibonacci_for_loop(2000),
+  fibonacci_while_loop(2000),
+  times = 100
+)
+```
+**Conclusion:** \par
+The for loop is for the ratio of Fibonacci numbers overall at n=200 and n=2000 faster than the while loop.
 
 ## c.
 Plot the sequence for  $n=100$. 
 For which $n$ does it start to stabilize to a value?
 What number does the sequence converge to?
+
+```{r}
+r100 <- fibonacci_for_loop(100)
+
+plot(
+  1:100, 
+  r100, 
+  type = "b", 
+  pch = 16,
+  xlab = "n", 
+  ylab = expression(r[n]),
+  main = "Ratio of Fibonacci numbers"
+)
+
+# golden ratio
+abline(h = (1 + sqrt(5)) / 2, lty = 2)
+```
+**Conclusion:** \par
+For small n the sequence fluctuates, but stabilizes quite fast at around n=~10 and it it is known, that the Fibonacci sequence converges to the golden ratio:
+
+$$
+\varphi = \frac{1+\sqrt{5}}{2}
+$$
 
 # 2. Gamma function (1 point)
 
