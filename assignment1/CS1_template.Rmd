@@ -216,68 +216,153 @@ It seems to converge to approximately $0.4$.
 
 # 3. Weak law of large numbers (1.5 points)
 
-The law of large numbers states that if you repeat an experiment
-independently a large number of times and average the result, what you
-obtain should be close to the expected value. Formally, the weak law of
-large numbers states that if $X_1, X_2, \ldots X_n$ are independently
-and identically distributed (iid) random variables with a finite
-expected value $E(X_i)=\mu<\infty$, then, for any $\epsilon > 0$
-$\lim_{n\rightarrow \infty} P(|\bar X_n-\mu|>\epsilon)=0$ where
-$\bar X_n=\frac{X_1+X_2+\ldots+X_n}{n}$ is the sample mean (the sample
-mean converges in probability to the expected value).
+The law of large numbers states that if you repeat an experiment independently a large number of times and average the result, what you obtain should be close to the expected value. Formally, the weak law of large numbers states that if 
+$X_1, X_2, \ldots X_n$ are independently and identically 
+distributed (iid) random variables with a finite expected value
+$E(X_i)=\mu<\infty$, then, for any $\epsilon > 0$
+$\lim_{n\rightarrow \infty} P(|\bar X_n-\mu|>\epsilon)=0$
+where $\bar X_n=\frac{X_1+X_2+\ldots+X_n}{n}$ is the sample mean (the sample mean converges in probability to the expected value).
 
-## a.
 
--   In R, simulate rolling a fair 6-sided die $n=10\,000$ times using
-    vectorized functions.
+## a. 
 
--   After each roll, compute the cumulative mean of all previous rolls.
+- In R, simulate rolling a fair 6-sided die $n=10\,000$ times using vectorized functions. 
+- After each roll, compute the cumulative mean of all previous rolls. 
+```{r}
+set.seed(123)
 
--   Plot the running average against the number of rolls and comment on
-    the result.
+running_average <- function(){
+  die_rolls     <- sample(1:6, size = 10000, replace = TRUE)
+  die_cum_means <- sapply(1:10000,function(x){mean(die_rolls[1:x])})
+  
+  return(die_cum_means)
+}
+```
 
-## b.
+- Plot the running average against the number of rolls and comment on the result.
+```{r}
+plot(1:10000, running_average(), type = "l",
+     main = "Development of cummulative mean",
+     xlab = "Number of rolls", ylab = "Cummulative mean")
+```
+We can observe the running average converges towards the theoretical mean $\mu=(1+2+3+4+5+6)\cdot\frac{1}{6}=3.5$. After around 1000 rolls the running average remains around 3.5 relatively stable. The weak law of large numbers holds.
 
--   Replicate the die-rolling experiment $M=50$ times using a for loop.
-    This will result in $50$ paths which you can plot against the number
-    of rolls.
+## b. 
+- Replicate the die-rolling experiment 
+ $M=50$ times using a for loop. 
+This will result in $50$
+paths which you can plot against the number of rolls.
 
--   Plot all 50 paths on the same graph to observe the variation in the
-    running averages.
+- Plot all 50 paths on the same graph to observe the variation in the running averages.
+```{r}
+#prepare plotting area
+plot(1, type = "n", main = "Development of cummulative mean",
+     xlab = "Number of rolls", ylab = "Cummulative mean",
+     xlim = c(1,10000), ylim = c(1,6))
+
+for(m in 1:50){
+  lines(1:10000, running_average())
+}
+```
+
 
 ## c.
-
 What is the theoretical expected value of a fair 6-sided die?
 
-## d.
+The theoretical mean is given by $\mu=(1+2+3+4+5+6)\cdot\frac{1}{6}=3.5$.
 
-Comment on how the running mean of the paths behaves relative to the
-expected value as $n$ increases.
+## d. 
+Comment on how the running mean of the paths behaves relative to the expected value  as $n$ increases.
 
-## e.
+The paths stabilize around the theoretical mean due to the weak law of large numbers. After around 1000 die casts the running averages of all 30 runs are quite close to 3.5 and remain within close proximity.
 
--   Modify the code in b. to use a while loop.
+## e. 
 
--   Stop the loop when the proportion of replications where the
-    difference between the running average and the expected value lies
-    outside the interval $[-\epsilon,\epsilon]$ is less than 0.05. Use
-    $\epsilon = 0.01$.
+- Modify the code in b. to use a while loop.
 
--   How high is $n$ at the end of the loop?
+- Stop the loop when the proportion of replications where the difference between the running average and the expected value lies outside the interval 
+$[-\epsilon,\epsilon]$ is less than 0.05. Use $\epsilon = 0.01$. 
 
-## f.
+- How high is $n$ at  the end of the loop?
+```{r}
+set.seed(123)
 
-gitgit
+running_average2 <- function(){
+  die_cum_means <- numeric(30000)
+  die_rolls     <- numeric(30000)
+  frac          <- 1
+  i             <- 1
+  
+  while(frac >= 0.05){
+    
+    die_rolls[i]     <- sample(1:6, size = 1)
+    die_cum_means[i] <- mean(die_rolls[die_rolls != 0])
+    
+    #take eps = 0.1; eps = 0.01 runtime too long
+    frac <- length(which(abs(die_cum_means[die_cum_means != 0] - 3.5) > 0.1)) / length(die_cum_means[die_cum_means != 0])
+    i <- i + 1
+    
+    #terminate if while-condition not fulfilled after 30000 iterations
+    if(i > 30000){
+      warning("More than 30000 iterations needed: returning 1")
+      die_cum_means <- 1
+      break()
+    }
+  }
+  
+  return(die_cum_means[die_cum_means != 0])
+}
 
--   Repeat the analysis in b, but instead of simulating from a discrete
-    uniform distribution, simulate from a continuous standard cauchy
-    distribution using `rcauchy()`. The (standard) cauchy distribution
-    arises from the ratio of two independent mean zero (standard)
-    normally distributed random variables.
+#prepare plotting area
+plot(1, type = "n", main = "Development of cummulative mean",
+     xlab = "Number of rolls", ylab = "Cummulative mean",
+     xlim = c(1,30000), ylim = c(1,6))
 
--   Plot the running mean against increasing $n$. Comment on whether the
-    weak Law of Large Numbers seems to hold for this distribution.
-    Explain why or why not.
+#record ns
+ns <- numeric(50)
+
+for(m in 1:50){
+  current <- running_average2()
+  ns[m] <- length(current)
+  lines(1:ns[m], current)
+}
+
+summary(ns)
+
+```
+For the 50 runs completed, the number of die rolls until stopping averages at 7162, with a minimum of 901 and a maximum of 29901. We take $\epsilon = 0.1$ due to the while loop taking a big runtime for 50 repetitions and the smaller choice of epsilon even when avoiding to elongate the result vector with every iteration.
+
+## f. 
+
+- Repeat the analysis in b, but instead of simulating from a 
+discrete uniform distribution, simulate from a continuous standard cauchy distribution using `rcauchy()`. The (standard) cauchy distribution arises from  the ratio of two independent 
+mean zero (standard) normally distributed random variables.
+```{r}
+set.seed(123)
+
+running_average_cauchy <- function(){
+  die_rolls     <- rcauchy(n = 10000)
+  die_cum_means <- sapply(1:10000,function(x){mean(die_rolls[1:x])})
+  
+  return(die_cum_means)
+}
+```
+
+- Plot the running mean against increasing 
+$n$. Comment on whether the weak Law of Large Numbers seems to hold for this distribution.
+Explain why or why not.
+
+```{r}
+#prepare plotting area
+plot(1, type = "n", main = "Development of cummulative mean",
+     xlab = "Number of rolls", ylab = "Cummulative mean",
+     xlim = c(1,10000), ylim = c(-9,10))
+
+for(m in 1:50){
+  lines(1:10000, running_average_cauchy())
+}
+```
+Due to the Cauchy distribution being the ratio of two independent standard normal variables, it has no finite first moment (expectation). Hence the assumptions for the weak law of large numbers are not fulfilled and it doesn't hold. Visually we can observe the running mean being repeatedly upset by extreme values.
 
 # 4. Central limit theorem (1.5 points)
 
@@ -524,23 +609,23 @@ Central Limit Theorem.
 
 # 5. Readable and efficient code (1 points)
 
-Read over the code below.
+Read over the code below. 
 
-## a.
-
+## a. 
 Explain (in text) what the code does.
 
-## b.
+The first chunk of code sequentially fits a linear model for the variables x and z and subsequently applies a sinus function to the resulting residuals, which is stored in x. This is however only performed if a certain number of x's values exceed a threshold, else a error is thrown. For the given seed, all calculations can be performed without error.
 
+The second chunk of code uses all but 250 values of a data.frame to fit a linear model. The 250 unused y-values are then predicted by the model. The square root of the mean squared errors of the predictions is calculated. This is repeated in 4 steps, where every time a different 250 rows are omitted. Every step is initiated by printing the step number and at the end a vector with the results is returned.
+
+
+## b.
 Explain (in text) what you would change to make the code more readable.
 
-## c.
+Both code chunks repeatedly execute very similar calculations each step. The operations should be wrapped in a function and make use of a for-loop, iterating over the steps to improve readability.
 
-Change the code according to b. and wrap it in a function. This function
-should have at most 10 lines (without adding commands to more lines such
-as `x <- 1; y <- 2`. Such commands will count as 2 lines!). Check that
-the function called on the same input outputs the same as the provided
-code.
+## c.
+Change the code according to b. and wrap it in a function. This function should have at most 10 lines (without adding commands to more lines such as `x <- 1; y <- 2`. Such commands will count as 2 lines!). Check that the function called on the same input outputs the same as the provided code.
 
 ```{r eval=FALSE}
 set.seed(1)
@@ -572,6 +657,25 @@ r <- fit$residuals
 x <- 4 * sin(r) + .04
 x
 ```
+```{r}
+#function for first chunk
+set.seed(1)
+x <- rnorm(100)
+z <- rnorm(100)
+
+sin_residuals <- function(x, z){
+  for (i in 1:4){
+    if (sum(x >= i/1000) < i) {
+      error <- paste("step ", i, " requires ", i, " observation(s) with value >= .00", i, sep = "")
+      stop(error) }
+  fit <- lm(x ~ z)
+  x <- i * sin(fit$residuals) + i/100 }
+  x
+}
+
+sin_residuals(x, z)
+```
+
 
 ```{r eval=FALSE}
 set.seed(1) 
@@ -599,6 +703,27 @@ fit4 <- lm(y ~ x, data = df[-(751:1000),])
 p4 <- predict(fit4, newdata = df[(751:1000),])
 r <- c(r, sqrt(mean((p4 - df[(751:1000),"y"])^2)))  
 r
+```
+```{r}
+#function for second chunk
+set.seed(1) 
+x <- rnorm(1000)
+y <- 2 + x + rnorm(1000)
+df <- data.frame(x, y)
+
+predict_stepwise <- function(df){
+  n <- length(df$x)
+  index_sets <- split(1:n, rep(1:4, each = n/4))
+  r <- numeric(4)
+  for (i in 1:4){
+    cat("Step", i, "\n")
+    fit <- lm(y ~ x, data = df[-index_sets[[i]],])
+    p <- predict(fit, newdata = df[index_sets[[i]],])
+    r[i] <- sqrt(mean((p - df[index_sets[[i]],"y"])^2)) }
+  r
+}
+
+predict_stepwise(df)
 ```
 
 # 6. Measuring and improving performance (2 points)
