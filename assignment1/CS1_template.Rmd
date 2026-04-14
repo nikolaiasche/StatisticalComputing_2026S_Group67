@@ -156,8 +156,7 @@ $$
 ## a.
 
 Write a function to compute the following for $n$ a positive integer
-using the `gamma` function in base R. 
-$$
+using the `gamma` function in base R. $$
 \rho_n =\frac{\Gamma((n-1)/2)}{\Gamma(1/2)\Gamma((n - 2)/2)}
 $$
 
@@ -176,7 +175,11 @@ behavior happens?
 ```{r}
 gamma_compute(2000)
 ```
-**Conclusion:** \par
+
+**Conclusion:**
+
+\par
+
 We see that the call to the function returns "Not a Number". This is
 because `gamma(1000)=1000!` is significantly larger than the largest
 number R can handle, therefore the function tires to devide infinity by
@@ -187,7 +190,10 @@ infinity, which returns "NaN"!
 Write an implementation which can also deal with large values of
 $n>1000$.
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 In order to do that, we use `lgamma()`, which returns the logarithm of
 the gamma function, which keeps the numbers involved smaller and turns
 the division in to a subtraction. At the end we exponentiate everything
@@ -213,7 +219,11 @@ N <- seq(1,2000, by = 10)
 plot(N, gamma_compute_large(N)/sqrt(N), type = "l", col = "red", ylab = expression(rho[n]/sqrt(n)), xlab = "n", main = "Asymptotic limit")
 #curve(log(x), add = TRUE, col="blue")
 ```
-**Conclusion:** \par
+
+**Conclusion:**
+
+\par
+
 It seems to converge to approximately $0.4$.
 
 # 3. Weak law of large numbers (1.5 points)
@@ -253,7 +263,11 @@ plot(1:10000, running_average(), type = "l",
      main = "Development of cummulative mean",
      xlab = "Number of rolls", ylab = "Cummulative mean")
 ```
-**Conclusion:** \par
+
+**Conclusion:**
+
+\par
+
 We can observe the running average converges towards the theoretical
 mean $\mu=(1+2+3+4+5+6)\cdot\frac{1}{6}=3.5$. After around 1000 rolls
 the running average remains around 3.5 relatively stable. The weak law
@@ -283,7 +297,10 @@ for(m in 1:50){
 
 What is the theoretical expected value of a fair 6-sided die?
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 The theoretical mean is given by
 $\mu=(1+2+3+4+5+6)\cdot\frac{1}{6}=3.5$.
 
@@ -292,7 +309,10 @@ $\mu=(1+2+3+4+5+6)\cdot\frac{1}{6}=3.5$.
 Comment on how the running mean of the paths behaves relative to the
 expected value as $n$ increases.
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 The paths stabilize around the theoretical mean due to the weak law of
 large numbers. After around 1000 die casts the running averages of all
 30 runs are quite close to 3.5 and remain within close proximity.
@@ -355,7 +375,10 @@ summary(ns)
 
 ```
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 For the 50 runs completed, the number of die rolls until stopping
 averages at 7162, with a minimum of 901 and a maximum of 29901. We take
 $\epsilon = 0.1$ due to the while loop taking a big runtime for 50
@@ -395,7 +418,11 @@ for(m in 1:50){
   lines(1:10000, running_average_cauchy())
 }
 ```
-**Conclusion:** \par
+
+**Conclusion:**
+
+\par
+
 Due to the Cauchy distribution being the ratio of two independent
 standard normal variables, it has no finite first moment (expectation).
 Hence the assumptions for the weak law of large numbers are not
@@ -653,7 +680,10 @@ Read over the code below.
 
 Explain (in text) what the code does.
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 The first chunk of code sequentially fits a linear model for the
 variables x and z and subsequently applies a sinus function to the
 resulting residuals, which is stored in x. This is however only
@@ -672,7 +702,10 @@ number and at the end a vector with the results is returned.
 
 Explain (in text) what you would change to make the code more readable.
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 Both code chunks repeatedly execute very similar calculations each step.
 The operations should be wrapped in a function and make use of a
 for-loop, iterating over the steps to improve readability.
@@ -839,7 +872,10 @@ kwtest <- function (x, g, ...)
 
 Write a pseudo code outlining what the function does.
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 *Input:* dataset $x$ (either list or vector) and grouping factor $g$
 (optional when x is a list)
 
@@ -907,7 +943,10 @@ kwtest(x_list)
 kwtest(x_vec, g)
 ```
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 We see, the results are identical.
 
 ## c.
@@ -942,7 +981,11 @@ kw_fast <- function(x, g) {
 }
 kw_fast(x_vec, g)
 ```
-**Conclusion:** \par
+
+**Conclusion:**
+
+\par
+
 We see our new function returns the same test statistic as in part b. We
 use optimized functions for counting: `rowsum()` and `tabulate()`
 instead of the slower but more flexible `tapply()`.
@@ -992,7 +1035,10 @@ kw_fast_multiple <- function(X,g) {
 head(kw_fast_multiple(X,grp))
 ```
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 The to implementations return the same test statistics, as expected.
 
 ## f.
@@ -1009,7 +1055,10 @@ bench_results <- microbenchmark(default_R = kw_default(X,grp),
 print(bench_results)
 ```
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 Our custom implementation is indeed significantly faster than the base R
 implementation (about 70 milliseconds on average). This is because we
 used highly optimized functions and skip the formatting and p-value
@@ -1063,7 +1112,10 @@ bench_results_2 <- microbenchmark(default_R = kw_default(X,grp),
 print(bench_results_2)
 ```
 
-**Conclusion:** \par
+**Conclusion:**
+
+\par
+
 This implementation is by far the fastest, since R handles vectorized
 operation very well this is not a surprise (the extreme difference
 however was a surprise).
