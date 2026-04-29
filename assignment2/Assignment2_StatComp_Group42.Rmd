@@ -83,7 +83,7 @@ Merge the datasets using `dplyr` on a unique key and retain the union of all obs
 
 ```{r}
 country_data <- education_expenditure %>%
-  full_join(youth_unemployment, by = "country") %>%
+  full_join(youth_unemployment_rate, by = "country") %>%
   full_join(net_migration_rate, by = "country")
 dim(country_data)
 glimpse(country_data)
@@ -119,7 +119,7 @@ country_codes <- read_csv("Country Data Codes.csv", show_col_types = FALSE) %>%
   select(country, iso_code) %>%
   mutate(country = str_trim(country))
 
-country_data_codes <- country_data_full %>%
+country_data_codes <- country_data %>%
   left_join(country_codes, by = "country")
 glimpse(country_codes)
 head(country_codes)
