@@ -193,11 +193,54 @@ The distinct() function had to be used due to left_join() resulting in some iso_
 
 -   Evaluate the tidiness of `df_vars` (observational units, variables, fixed vs. measured variables). Make adjustments to tidy the data, if necessary.
 
+A dataset is called tidy if following four criteria hold:
+  1. Each variable forms a column.
+  2. Each observation forms a row.
+  3. Each type of observational unit forms a table
+
+Furthermore Fixed variables should come before measured variables.
+
+We see in subtask d that the first three criteria are met. The observational units in our case are the countries and each collumn is a seperate variable. We should however rearrange the data a bit.
+
+```{r}
+df_vars <- df_vars %>%
+  select(iso_code, country, region, income_status, everything())
+head(df_vars)
+```
+
+
+
 -   Create a frequency table for the income status variable and briefly interpret the results.
+
+```{r}
+df_vars %>%
+  group_by(income_status) %>%
+  count()
+```
+
+we see that high income countries are most common, followed by lower/upper middle income countries and at last low income countries. There are some without classification, which could be explained by the remotness and difficulty in assesing this in very small countries/islands.
 
 -   Analyze the distribution of income status across continents by computing absolute and relative frequencies. Comment on the findings.
 
+```{r}
+df_vars %>%
+  group_by(region, income_status) %>%
+  summarise(abs_freq = n(), rel_freq = n()/nrow(df_vars) ) %>%
+  arrange(desc(rel_freq)) %>%
+  head(10)
+```
+
+We observe that most high income countries are in Europe, most low and lower-middle income countries are in Africa and most upper-middle income countries are in Asia
+
 -   Using the distribution of income status across continents, identify which countries are the only ones in their income group across the continent. Discuss briefly.
+
+```{r}
+df_vars %>% 
+  group_by(region, income_status) %>%
+  filter(n() == 1) %>%
+  select(country, region, income_status)
+```
+We see that Bolivia is the only lower-middle-income country in South America. Moreover the Seychelles is somewhat surprisingly the only  High-income country in Africa, which could be because of their role as a tax haven. Lastly, Venezuela is the only country in South America without classification, which could be caused by the tense political and economical situation there.
 
 ## f. Further Summary Statistics and Insights
 
