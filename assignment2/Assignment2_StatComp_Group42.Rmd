@@ -246,11 +246,70 @@ We see that Bolivia is the only lower-middle-income country in South America. Mo
 
 -   Create a table of average (mean and median) values for expenditure, youth unemployment rate and net migration rate separated into income status. Make sure that in the output, the ordering of the income classes is proper (i.e., L, LM, UM, H or the other way around). Briefly comment the results and any differences between the mean and median.
 
+```{r}
+df_vars <- df_vars %>%
+  mutate(income_status = factor(income_status, 
+                                levels = c("Low-income countries", 
+                                           "Lower-middle-income countries", 
+                                           "Upper-middle-income countries", 
+                                           "High-income countries")))
+
+df_vars %>%
+  filter(!is.na(income_status)) %>%
+  group_by(income_status) %>%
+  summarise(across(c(education_expenditure, youth_unemployment_rate, net_migration_rate),
+                   list(mean = ~mean(.x, na.rm = TRUE), 
+                        median = ~median(.x, na.rm = TRUE))))
+
+```
+The table shows that the mean youth unemployment rate is higher than the median, suggesting a right skewed distribution, coming from the fact that a few countries with extremly high unemployment rate pull the average up. Net migration also shows a clear trend, high income countries tend to have positive net migration (influx of people) while low income countries have a negative net migration in general (people leaving). The differences between mean and median again highlight the presence of extreme outliers.
+
 -   Look at the standard deviation and the interquartile range of the variables per income status instead of the location statistics above. Do you gain additional insights? Briefly comment the results.
+
+```{r}
+df_vars %>%
+  filter(!is.na(income_status)) %>%
+  group_by(income_status) %>%
+  summarise(across(c(education_expenditure, youth_unemployment_rate, net_migration_rate),
+                   list(stand_dev = ~sd(.x, na.rm = TRUE),
+                        iqr = ~IQR(.x, na.rm = TRUE))))
+  
+```
+We see that youth unemployment varies substantially across all groups, meaning income status alone does not guarantee a stable youth labor market. Similarly the high migration rate standard deviation indicates differing behavior from countries in high income groups, despite the mean being high in this group.
 
 -   Extend the analysis of the statistics median and IQR to **each income status and continent combination**. Play around with displaying the resulting table. Use `pivot_longer()` and/or `pivot_wider()` to generate different outputs. Discuss the results as well as the readability of the different tables.
 
+```{r}
+stat_table <- df_vars %>%
+  filter(!is.na(income_status) & !is.na(region)) %>%
+  group_by(region, income_status) %>%
+  summarise(across(c(education_expenditure, youth_unemployment_rate, net_migration_rate),
+                   list(median = ~median(.x, na.rm = TRUE), 
+                        iqr = ~IQR(.x, na.rm = TRUE))))
+head(stat_table)
+
+long_table <- stat_table %>%
+  pivot_longer(-c(region, income_status), values_to = "value", names_to = "metric")
+head(long_table)
+
+wide_table <- long_table %>%
+  pivot_wider( names_from = "income_status", values_from = "value")
+head(wide_table)
+```
+
+The standard summarise output is a wide table with many columns which could be difficult to read. We transform it first to a long format, which is less intuitive for humans to read but more suitable for further analysis and plotting. Lastly we transform it to another wide table, which is much easier to read for comparative analysis.
+
 -   Identify countries performing well in terms of both **youth unemployment** and **net migration rate** (top 25% in net migration and bottom 25% in youth unemployment within their continent).
+
+```{r}
+df_vars %>%
+  group_by(region) %>%
+  filter(net_migration_rate >= quantile(net_migration_rate, 0.75, na.rm = TRUE) &
+         youth_unemployment_rate <= quantile(youth_unemployment_rate, 0.25, na.rm = TRUE)) %>%
+  select(region, country, youth_unemployment_rate, net_migration_rate) %>%
+  arrange(region, youth_unemployment_rate)
+```
+
 
 ## g. Conditional Probabilities
 
