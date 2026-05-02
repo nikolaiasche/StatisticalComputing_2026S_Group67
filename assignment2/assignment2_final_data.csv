@@ -1,0 +1,228 @@
+"iso_code";"country";"region";"income_status";"education_expenditure";"youth_unemployment_rate";"net_migration_rate"
+"CUB";"Cuba";"North America";"Upper-middle-income countries";12,8;6,1;-3,7
+"FSM";"Micronesia, Federated States of";"Oceania";"Lower-middle-income countries";12,5;18,9;-20,9
+"SLB";"Solomon Islands";"Oceania";"Lower-middle-income countries";9,9;1,3;-1,6
+"MSR";"Montserrat";"North America";.;8,8;.;0
+"NOR";"Norway";"Europe";"High-income countries";7,9;9,7;4
+"DNK";"Denmark";"Europe";"High-income countries";7,8;9,4;2,8
+"ISL";"Iceland";"Europe";"High-income countries";7,7;6,1;3,3
+"SLE";"Sierra Leone";"Africa";"Low-income countries";7,7;9,4;-1,2
+"BLZ";"Belize";"North America";"Upper-middle-income countries";7,6;15,3;-1
+"SWE";"Sweden";"Europe";"High-income countries";7,6;16,8;5,2
+"BOL";"Bolivia";"South America";"Lower-middle-income countries";7,3;6,9;-0,3
+"SWZ";"Eswatini";"Africa";"Lower-middle-income countries";7,1;47,1;-6,8
+"CRI";"Costa Rica";"North America";"High-income countries";7;20,6;0,8
+"LSO";"Lesotho";"Africa";"Lower-middle-income countries";7;34,4;-6,1
+"BTN";"Bhutan";"Asia";"Lower-middle-income countries";6,9;10,7;0
+"OMN";"Oman";"Asia";"High-income countries";6,8;13,7;-0,4
+"TLS";"Timor-Leste";"Asia";"Lower-middle-income countries";6,8;13,2;-3,9
+"TUN";"Tunisia";"Africa";"Lower-middle-income countries";6,6;35;-1,4
+"ZAF";"South Africa";"Africa";"Upper-middle-income countries";6,5;53,4;-0,2
+"BEL";"Belgium";"Europe";"High-income countries";6,4;15,8;4,8
+"FIN";"Finland";"Europe";"High-income countries";6,4;17;2,6
+"BRA";"Brazil";"South America";"Upper-middle-income countries";6,3;28,5;-0,1
+"NZL";"New Zealand";"Oceania";"High-income countries";6,3;11,5;8
+"HND";"Honduras";"North America";"Lower-middle-income countries";6,1;10,7;-1,4
+"ISR";"Israel";"Asia";"High-income countries";6,1;7,2;2,1
+"PRI";"Puerto Rico";"North America";"High-income countries";6,1;26,6;-14,1
+"KGZ";"Kyrgyzstan";"Asia";"Lower-middle-income countries";6;14,2;-5
+"ZWE";"Zimbabwe";"Africa";"Lower-middle-income countries";5,9;16,5;-5
+"CYP";"Cyprus";"Europe";"High-income countries";5,8;20,2;7,6
+"VCT";"Saint Vincent and the Grenadines";"North America";"Upper-middle-income countries";5,7;.;-7,2
+"DMA";"Dominica";"North America";"Upper-middle-income countries";5,6;.;-5,3
+"ARG";"Argentina";"South America";"Upper-middle-income countries";5,5;23,7;-0,1
+"ABW";"Aruba";"North America";"High-income countries";5,5;.;8,4
+"FRA";"France";"Europe";"High-income countries";5,5;20,8;1,1
+"GUY";"Guyana";"South America";"High-income countries";5,5;21,5;0
+"MOZ";"Mozambique";"Africa";"Low-income countries";5,5;7,4;-1,7
+"AUT";"Austria";"Europe";"High-income countries";5,4;9,4;3,6
+"BFA";"Burkina Faso";"Africa";"Low-income countries";5,4;8,7;-0,6
+"CHL";"Chile";"South America";"High-income countries";5,4;18,1;0,3
+"MDA";"Moldova";"Europe";"Upper-middle-income countries";5,4;7,4;-9
+"TGO";"Togo";"Africa";"Low-income countries";5,4;3,9;0
+"UKR";"Ukraine";"Europe";"Upper-middle-income countries";5,4;17,9;2,3
+"GBR";"United Kingdom";"Europe";"High-income countries";5,4;11,3;2,5
+"CAN";"Canada";"North America";"High-income countries";5,3;11,1;5,6
+"XGZ";"Gaza Strip";.;.;5,3;42,2;-4,7
+"KEN";"Kenya";"Africa";"Lower-middle-income countries";5,3;7,4;-0,2
+"UZB";"Uzbekistan";"Asia";"Lower-middle-income countries";5,3;.;-1,9
+"XWB";"West Bank";.;.;5,3;42,2;-4,2
+"CPV";"Cabo Verde";"Africa";"Upper-middle-income countries";5,2;27,8;-0,6
+"JAM";"Jamaica";"North America";"Upper-middle-income countries";5,2;24,2;-9,4
+"NLD";"Netherlands";"Europe";"High-income countries";5,2;7,2;1,9
+"TJK";"Tajikistan";"Asia";"Lower-middle-income countries";5,2;.;-1,1
+"AUS";"Australia";"Oceania";"High-income countries";5,1;11,8;8,1
+"BDI";"Burundi";"Africa";"Low-income countries";5,1;2,9;-0,8
+"NPL";"Nepal";"Asia";"Lower-middle-income countries";5,1;21,4;-3,1
+"STP";"Sao Tome and Principe";"Africa";"Lower-middle-income countries";5,1;20,8;-7,9
+"CHE";"Switzerland";"Europe";"High-income countries";5,1;7,9;4,6
+"ECU";"Ecuador";"South America";"Upper-middle-income countries";5;7,9;0
+"EST";"Estonia";"Europe";"High-income countries";5;11,8;-3,1
+"PRT";"Portugal";"Europe";"High-income countries";5;20,3;0,3
+"USA";"United States";"North America";"High-income countries";5;8,6;3
+"URY";"Uruguay";"South America";"High-income countries";5;25,9;-0,9
+"CUW";"Curacao";"North America";"High-income countries";4,9;29,3;-1,3
+"DEU";"Germany";"Europe";"High-income countries";4,9;6,2;1,5
+"BLR";"Belarus";"Europe";"Upper-middle-income countries";4,8;10,6;0,7
+"MLT";"Malta";"Europe";"High-income countries";4,8;9,1;6,6
+"SEN";"Senegal";"Africa";"Lower-middle-income countries";4,8;8,1;-1,3
+"SVN";"Slovenia";"Europe";"High-income countries";4,8;8,8;1,5
+"COK";"Cook Islands";"Oceania";.;4,7;.;-29,9
+"ETH";"Ethiopia";"Africa";.;4,7;25,2;-0,2
+"HUN";"Hungary";"Europe";"High-income countries";4,7;10,2;1,3
+"MWI";"Malawi";"Africa";"Low-income countries";4,7;40,5;0
+"MUS";"Mauritius";"Africa";"Upper-middle-income countries";4,7;23,9;0
+"RUS";"Russia";"Europe";"High-income countries";4,7;17;1,7
+"POL";"Poland";"Europe";"High-income countries";4,6;11,7;-0,3
+"ZMB";"Zambia";"Africa";"Lower-middle-income countries";4,6;24;0
+"COL";"Colombia";"South America";"Upper-middle-income countries";4,5;18,5;-0,6
+"MEX";"Mexico";"North America";"Upper-middle-income countries";4,5;6,9;-1,9
+"VUT";"Vanuatu";"Oceania";"Lower-middle-income countries";4,5;.;-1,3
+"BRB";"Barbados";"North America";"High-income countries";4,4;29,6;-0,3
+"BRN";"Brunei";"Asia";"High-income countries";4,4;28,9;2,3
+"LVA";"Latvia";"Europe";"High-income countries";4,4;12,2;-5,9
+"NIC";"Nicaragua";"North America";"Lower-middle-income countries";4,4;8,5;-2,4
+"SYC";"Seychelles";"Africa";"High-income countries";4,4;11,6;1
+"KOR";"Korea, South";"Asia";"High-income countries";4,3;10,2;2,3
+.;"Turkey";"Asia";.;4,3;20,2;-4,3
+"MYS";"Malaysia";"Asia";"Upper-middle-income countries";4,2;10,5;-0,3
+"WSM";"Samoa";"Oceania";"Upper-middle-income countries";4,2;31,9;-8,1
+"ESP";"Spain";"Europe";"High-income countries";4,2;34,3;7
+"VNM";"Vietnam";"Asia";"Lower-middle-income countries";4,2;6,9;-0,3
+"AFG";"Afghanistan";"Asia";"Low-income countries";4,1;17,6;-0,1
+"BGR";"Bulgaria";"Europe";"High-income countries";4,1;12,7;-0,3
+"MDV";"Maldives";"Asia";"Upper-middle-income countries";4,1;15,9;-12,7
+"MNG";"Mongolia";"Asia";"Upper-middle-income countries";4,1;16,8;-0,8
+"THA";"Thailand";"Asia";"Upper-middle-income countries";4,1;3,7;0
+"GHA";"Ghana";"Africa";"Lower-middle-income countries";4;9,1;-1,6
+"IRN";"Iran";"Asia";"Upper-middle-income countries";4;27,6;-0,3
+"ITA";"Italy";"Europe";"High-income countries";4;32,2;3,2
+"HRV";"Croatia";"Europe";"High-income countries";3,9;23,7;-1
+"CZE";"Czechia";"Europe";"High-income countries";3,9;6,7;2,3
+"FJI";"Fiji";"Oceania";"Upper-middle-income countries";3,9;15,4;-6,2
+"SVK";"Slovakia";"Europe";"High-income countries";3,9;14,9;0,2
+"HKG";"Hong Kong";"Asia";"High-income countries";3,8;8,7;1,7
+"IND";"India";"Asia";"Lower-middle-income countries";3,8;22,5;0
+"LTU";"Lithuania";"Europe";"High-income countries";3,8;11,1;-5,9
+"MLI";"Mali";"Africa";"Low-income countries";3,8;16,9;-3,9
+"PER";"Peru";"South America";"Upper-middle-income countries";3,8;14,7;-1,8
+"ALB";"Albania";"Europe";"Upper-middle-income countries";3,6;31,9;-3,3
+"DJI";"Djibouti";"Africa";"Lower-middle-income countries";3,6;.;5,1
+"SLV";"El Salvador";"North America";"Upper-middle-income countries";3,6;9,6;-4,8
+"IDN";"Indonesia";"Asia";"Upper-middle-income countries";3,6;16,5;-1,1
+"LUX";"Luxembourg";"Europe";"High-income countries";3,6;14,2;13,3
+"SMR";"San Marino";"Europe";"High-income countries";3,6;27,4;6,6
+"SRB";"Serbia";"Europe";"Upper-middle-income countries";3,6;29,7;0
+"COG";"Congo, Republic of the";"Africa";"Lower-middle-income countries";3,5;.;-0,9
+"GEO";"Georgia";"Asia";"Upper-middle-income countries";3,5;29,9;0,1
+"IRL";"Ireland";"Europe";"High-income countries";3,5;13,8;3,9
+"NER";"Niger";"Africa";"Low-income countries";3,5;0,7;-0,7
+"AGO";"Angola";"Africa";"Lower-middle-income countries";3,4;39,4;-0,2
+"PRY";"Paraguay";"South America";"Upper-middle-income countries";3,4;14,5;-0,1
+"TZA";"Tanzania";"Africa";"Lower-middle-income countries";3,4;3,9;-0,4
+"CIV";"Cote d'Ivoire";"Africa";"Lower-middle-income countries";3,3;5,5;1,2
+"LCA";"Saint Lucia";"North America";"Upper-middle-income countries";3,3;46,2;-1,7
+"AND";"Andorra";"Europe";"High-income countries";3,2;.;0
+"GRD";"Grenada";"North America";"Upper-middle-income countries";3,2;.;-2,6
+"GTM";"Guatemala";"North America";"Upper-middle-income countries";3,2;5;-1,7
+"JPN";"Japan";"Asia";"High-income countries";3,2;3,6;0
+"PAN";"Panama";"North America";"High-income countries";3,2;10,2;-0,1
+"CMR";"Cameroon";"Africa";"Lower-middle-income countries";3,1;6,3;-0,3
+"JOR";"Jordan";"Asia";"Lower-middle-income countries";3,1;35,6;-11,3
+"NAM";"Namibia";"Africa";"Lower-middle-income countries";3,1;38;0
+"ROU";"Romania";"Europe";"High-income countries";3,1;16,2;-0,2
+"RWA";"Rwanda";"Africa";"Low-income countries";3,1;20,6;-3,3
+"TKM";"Turkmenistan";"Asia";"Upper-middle-income countries";3,1;.;-1,7
+"BEN";"Benin";"Africa";"Lower-middle-income countries";2,9;5,6;0,3
+"LAO";"Laos";"Asia";"Lower-middle-income countries";2,9;18,2;-1
+"PAK";"Pakistan";"Asia";"Lower-middle-income countries";2,9;7,8;-0,9
+"SGP";"Singapore";"Asia";"High-income countries";2,9;9,1;11,8
+"TCA";"Turks and Caicos Islands";"North America";"High-income countries";2,9;.;8,9
+"HTI";"Haiti";"North America";"Lower-middle-income countries";2,8;.;-1,9
+"MDG";"Madagascar";"Africa";"Low-income countries";2,8;1;0
+"ARM";"Armenia";"Asia";"Upper-middle-income countries";2,7;36,3;-5,5
+"GAB";"Gabon";"Africa";"Upper-middle-income countries";2,7;35,7;3,9
+"MAC";"Macau";"Asia";"High-income countries";2,7;5,3;3,3
+"QAT";"Qatar";"Asia";"High-income countries";2,7;0,4;6,5
+"KAZ";"Kazakhstan";"Asia";"Upper-middle-income countries";2,6;3,8;0,4
+"LBR";"Liberia";"Africa";"Low-income countries";2,6;2,3;-2,9
+"LIE";"Liechtenstein";"Europe";"High-income countries";2,6;.;4,9
+"KNA";"Saint Kitts and Nevis";"North America";"High-income countries";2,6;.;1,2
+"AZE";"Azerbaijan";"Asia";"Upper-middle-income countries";2,5;13,4;0
+"VGB";"British Virgin Islands";"North America";"High-income countries";2,5;.;15,5
+"TCD";"Chad";"Africa";"Low-income countries";2,5;.;-0,1
+"COM";"Comoros";"Africa";"Lower-middle-income countries";2,5;19,5;-2,3
+"LBN";"Lebanon";"Asia";"Lower-middle-income countries";2,5;.;-88,7
+"GMB";"Gambia, The";"Africa";"Low-income countries";2,4;13,1;-1,6
+"BHR";"Bahrain";"Asia";"High-income countries";2,3;5,3;10,6
+"GIN";"Guinea";"Africa";"Lower-middle-income countries";2,3;1;0
+"KHM";"Cambodia";"Asia";"Lower-middle-income countries";2,2;1,1;-0,3
+"GNB";"Guinea-Bissau";"Africa";"Low-income countries";2,1;.;-3,8
+"LKA";"Sri Lanka";"Asia";"Lower-middle-income countries";2,1;21;-1,3
+"UGA";"Uganda";"Africa";"Low-income countries";2,1;14,8;-3,5
+"MMR";"Burma";"Asia";"Lower-middle-income countries";1,9;2;-1,4
+"MRT";"Mauritania";"Africa";"Lower-middle-income countries";1,9;15,2;-0,8
+"PNG";"Papua New Guinea";"Oceania";"Lower-middle-income countries";1,9;3,6;0
+"BMU";"Bermuda";"North America";"High-income countries";1,5;29,3;1,6
+"COD";"Congo, Democratic Republic of the";"Africa";"Low-income countries";1,5;8,7;-0,9
+"MCO";"Monaco";"Europe";"High-income countries";1,5;26,6;8,3
+"SSD";"South Sudan";"Africa";"Low-income countries";1,5;38,6;0,2
+"BGD";"Bangladesh";"Asia";"Lower-middle-income countries";1,3;12,8;-3
+"CAF";"Central African Republic";"Africa";"Low-income countries";1,2;.;0
+"PYF";"French Polynesia";"Oceania";"High-income countries";.;56,7;-0,7
+"XKS";"Kosovo";.;.;.;55,4;-1,8
+"LBY";"Libya";"Africa";"Upper-middle-income countries";.;48,7;-0,7
+.;"Macedonia";"Asia";.;.;45,4;0,4
+"GRC";"Greece";"Europe";"High-income countries";.;39,9;0,9
+"DZA";"Algeria";"Africa";"Upper-middle-income countries";.;39,3;-0,9
+"NCL";"New Caledonia";"Oceania";"High-income countries";.;38,4;3,8
+"BWA";"Botswana";"Africa";"Upper-middle-income countries";.;36;2,9
+"SYR";"Syria";"Asia";"Low-income countries";.;35,8;27,1
+"BIH";"Bosnia and Herzegovina";"Europe";"Upper-middle-income countries";.;33,8;-0,4
+"EGY";"Egypt";"Africa";"Lower-middle-income countries";.;29,6;-0,3
+"GUM";"Guam";"Oceania";"High-income countries";.;29,4;-11
+"MNE";"Montenegro";"Europe";"Upper-middle-income countries";.;29,4;-4,9
+"SAU";"Saudi Arabia";"Asia";"High-income countries";.;28,8;4,7
+"NRU";"Nauru";"Oceania";"High-income countries";.;26,6;-11,3
+"BHS";"Bahamas, The";"North America";"High-income countries";.;25,8;0
+"IRQ";"Iraq";"Asia";"Upper-middle-income countries";.;25,6;-0,5
+"YEM";"Yemen";"Asia";"Low-income countries";.;24,5;-0,2
+"MAR";"Morocco";"Africa";"Lower-middle-income countries";.;22,2;-1,9
+"TUV";"Tuvalu";"Oceania";"Upper-middle-income countries";.;20,6;-6,5
+"KIR";"Kiribati";"Oceania";"Lower-middle-income countries";.;17,1;-2,8
+"KWT";"Kuwait";"Asia";"High-income countries";.;15,4;-3,3
+"VEN";"Venezuela";"South America";.;.;14,6;-3,4
+"CYM";"Cayman Islands";"North America";"High-income countries";.;13,8;13
+"NGA";"Nigeria";"Africa";"Lower-middle-income countries";.;13,8;-0,2
+"DOM";"Dominican Republic";"North America";"Upper-middle-income countries";.;13,5;-2,7
+"SUR";"Suriname";"South America";"Upper-middle-income countries";.;13,4;0,5
+"MHL";"Marshall Islands";"Oceania";"Upper-middle-income countries";.;11;-4,5
+"IMN";"Isle of Man";"Europe";"High-income countries";.;10,1;5,2
+"TTO";"Trinidad and Tobago";"North America";"High-income countries";.;8,7;-5,4
+"ARE";"United Arab Emirates";"Asia";"High-income countries";.;6,9;7,6
+"PHL";"Philippines";"Asia";"Lower-middle-income countries";.;6,7;-1,8
+"PLW";"Palau";"Oceania";"High-income countries";.;5,6;0,9
+"AIA";"Anguilla";"North America";.;.;.;11,1
+"SXM";"Sint Maarten";"North America";"High-income countries";.;.;6
+"JEY";"Jersey";"Europe";.;.;.;2,3
+"ATG";"Antigua and Barbuda";"North America";"High-income countries";.;.;2,1
+"GGY";"Guernsey";"Europe";.;.;.;1,9
+"TWN";"Taiwan";"Asia";"High-income countries";.;.;0,8
+"GNQ";"Equatorial Guinea";"Africa";"Upper-middle-income countries";.;.;0
+"FRO";"Faroe Islands";"Europe";"High-income countries";.;.;0
+"PRK";"Korea, North";"Asia";"Low-income countries";.;.;0
+"SHN";"Saint Helena, Ascension, and Tristan da Cunha";"Africa";.;.;.;0
+"CHN";"China";"Asia";"Upper-middle-income countries";.;.;-0,4
+"SDN";"Sudan";"Africa";"Low-income countries";.;.;-0,4
+"BLM";"Saint Barthelemy";"North America";.;.;.;-3
+"GIB";"Gibraltar";"Europe";"High-income countries";.;.;-3,3
+"SOM";"Somalia";"Africa";"Low-income countries";.;.;-3,8
+"WLF";"Wallis and Futuna";"Oceania";.;.;.;-4,3
+"GRL";"Greenland";"North America";"High-income countries";.;.;-6
+"MAF";"Saint Martin";"North America";"High-income countries";.;.;-6
+"VIR";"Virgin Islands";"North America";"High-income countries";.;.;-7,5
+"SPM";"Saint Pierre and Miquelon";"North America";.;.;.;-7,7
+"ERI";"Eritrea";"Africa";"Low-income countries";.;.;-11,6
+"MNP";"Northern Mariana Islands";"Oceania";"High-income countries";.;.;-15,4
+"TON";"Tonga";"Oceania";"Upper-middle-income countries";.;.;-17,9
+"ASM";"American Samoa";"Oceania";"High-income countries";.;.;-26,1

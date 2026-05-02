@@ -1,0 +1,1218 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Case Study 2},
+  pdfauthor={First Name, Last Name},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Case Study 2}
+\author{First Name, Last Name}
+\date{2026-04-02}
+
+\begin{document}
+\maketitle
+
+\emph{The .Rmd} \textbf{and} \emph{.html (or .pdf) should be uploaded in
+TUWEL by the deadline. Refrain from using explanatory comments in the R
+code chunks but write them as text instead. Points will be deducted if
+the submitted file is not in a decent form.}
+
+\textbf{DISCLAIMER}: In case students did not contribute equally,
+include a disclaimer stating what each student's contribution was.
+
+The CIA World Factbook provides intelligence on various aspects of 266
+world entities, including history, people, government, economy, energy,
+geography, environment, communications, transportation, military,
+terrorism, and transnational issues. This case study involves analyzing
+world data from 2020, focusing on:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Education Expenditure (\% of GDP)}
+\item
+  \textbf{Youth Unemployment Rate (15-24 years)}
+\item
+  \textbf{Net Migration Rate} (difference between the number of people
+  entering and leaving a country per 1,000 persons)
+\end{itemize}
+
+The data was sourced from the
+\href{https://www.cia.gov/the-world-factbook/about/archives/}{CIA World
+Factbook Archives}. You are required to use \texttt{dplyr} for data
+manipulation, while any package can be used for importing data.
+
+\section{Tasks:}\label{tasks}
+
+\subsection{a. Data Import and
+Cleaning}\label{a.-data-import-and-cleaning}
+
+Load the following datasets from TUWEL and ensure that missing values
+are handled correctly and column names are clear. Each dataset should
+ultimately contain only two columns: \textbf{country} and the respective
+variable. Note that some data sets also contain information on the year
+when the value was last updated.
+
+\begin{itemize}
+\item
+  \texttt{rawdata\_369.txt} which contains the (estimated) public
+  expenditure on education as a percent of GDP. \emph{Pay attention! The
+  delimiter is 2 or more white spaces (one space would not work as it
+  would separate country names which contain a space); you have to skip
+  the first two lines}.
+\item
+  \texttt{rawdata\_373.csv} which contains the (estimated) youth
+  unemployment rate (15-24) per country
+\item
+  \texttt{rawdata\_347.txt} which contains (estimated) net migration
+  rate per country.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attache Paket: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## Die folgenden Objekte sind maskiert von 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## Die folgenden Objekte sind maskiert von 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(readr)}
+\FunctionTok{library}\NormalTok{(stringr)}
+\FunctionTok{library}\NormalTok{(tibble)}
+\FunctionTok{library}\NormalTok{(tidyr)}
+\FunctionTok{library}\NormalTok{(kableExtra)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attache Paket: 'kableExtra'
+\end{verbatim}
+
+\begin{verbatim}
+## Das folgende Objekt ist maskiert 'package:dplyr':
+## 
+##     group_rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load rawdata\_369.txt (public expenditure on education)}
+\NormalTok{education\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_lines}\NormalTok{(}\StringTok{"rawdata\_369.txt"}\NormalTok{, }\AttributeTok{skip =} \DecValTok{2}\NormalTok{)}
+
+\NormalTok{education\_expenditure }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{country =} \FunctionTok{substr}\NormalTok{(education\_data, }\DecValTok{9}\NormalTok{, }\DecValTok{72}\NormalTok{),}
+  \AttributeTok{education\_expenditure =} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{substr}\NormalTok{(education\_data, }\DecValTok{73}\NormalTok{, }\DecValTok{84}\NormalTok{))}
+\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{country =} \FunctionTok{str\_trim}\NormalTok{(country))}
+
+\FunctionTok{glimpse}\NormalTok{(education\_expenditure)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 170
+## Columns: 2
+## $ country               <chr> "Cuba", "Micronesia, Federated States of", "Solo~
+## $ education_expenditure <dbl> 12.8, 12.5, 9.9, 8.8, 7.9, 7.8, 7.7, 7.7, 7.6, 7~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load rawdata\_373.csv (youth unemployment rate)}
+\NormalTok{youth\_unemployment\_rate }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"rawdata\_373.csv"}\NormalTok{, }\AttributeTok{show\_col\_types =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}
+    \AttributeTok{country =}\NormalTok{ country\_name,}
+    \AttributeTok{youth\_unemployment\_rate =}\NormalTok{ youth\_unempl\_rate}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{country =} \FunctionTok{str\_trim}\NormalTok{(country))}
+\FunctionTok{glimpse}\NormalTok{(youth\_unemployment\_rate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 181
+## Columns: 2
+## $ country                 <chr> "French Polynesia", "Kosovo", "South Africa", ~
+## $ youth_unemployment_rate <dbl> 56.7, 55.4, 53.4, 48.7, 47.1, 46.2, 45.4, 42.2~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load rawdata\_347.txtv (net migration rate)}
+\NormalTok{migration\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_lines}\NormalTok{(}\StringTok{"rawdata\_347.txt"}\NormalTok{, }\AttributeTok{skip =} \DecValTok{2}\NormalTok{)}
+
+\NormalTok{net\_migration\_rate }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{country =} \FunctionTok{str\_trim}\NormalTok{(}\FunctionTok{substr}\NormalTok{(migration\_data, }\DecValTok{9}\NormalTok{, }\DecValTok{72}\NormalTok{)),}
+  \AttributeTok{net\_migration\_rate =} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{substr}\NormalTok{(migration\_data, }\DecValTok{73}\NormalTok{, }\DecValTok{84}\NormalTok{))}
+\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{country =} \FunctionTok{str\_trim}\NormalTok{(country))}
+\FunctionTok{glimpse}\NormalTok{(net\_migration\_rate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 227
+## Columns: 2
+## $ country            <chr> "Syria", "British Virgin Islands", "Luxembourg", "C~
+## $ net_migration_rate <dbl> 27.1, 15.5, 13.3, 13.0, 11.8, 11.1, 10.6, 8.9, 8.4,~
+\end{verbatim}
+
+\textbf{Conclusion:}
+
+The files rawdata\_369.txt and rawdata\_347 contain a lot of white
+spaces between the columns. In order to correctly import the data, we
+can not blindly use the read\_table function, but we first have to call
+read\_lines and then substring the appropriate data from the lines into
+the fitting column and finally trim country in order to get rid of the
+tailing white spaces.
+
+\subsection{b. Merging Raw Data}\label{b.-merging-raw-data}
+
+Merge the datasets using \texttt{dplyr} on a unique key and retain the
+union of all observations.
+
+\begin{itemize}
+\tightlist
+\item
+  What key are you using for merging?
+\item
+  Return the dimensions of the merged dataset.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{country\_data }\OtherTok{\textless{}{-}}\NormalTok{ education\_expenditure }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{full\_join}\NormalTok{(youth\_unemployment\_rate, }\AttributeTok{by =} \StringTok{"country"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{full\_join}\NormalTok{(net\_migration\_rate, }\AttributeTok{by =} \StringTok{"country"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(country\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 227   4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glimpse}\NormalTok{(country\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 227
+## Columns: 4
+## $ country                 <chr> "Cuba", "Micronesia, Federated States of", "So~
+## $ education_expenditure   <dbl> 12.8, 12.5, 9.9, 8.8, 7.9, 7.8, 7.7, 7.7, 7.6,~
+## $ youth_unemployment_rate <dbl> 6.1, 18.9, 1.3, NA, 9.7, 9.4, 6.1, 9.4, 15.3, ~
+## $ net_migration_rate      <dbl> -3.7, -20.9, -1.6, 0.0, 4.0, 2.8, 3.3, -1.2, -~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(country\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 4
+##   country        education_expenditure youth_unemployment_r~1 net_migration_rate
+##   <chr>                          <dbl>                  <dbl>              <dbl>
+## 1 Cuba                            12.8                    6.1               -3.7
+## 2 Micronesia, F~                  12.5                   18.9              -20.9
+## 3 Solomon Islan~                   9.9                    1.3               -1.6
+## 4 Montserrat                       8.8                   NA                  0  
+## 5 Norway                           7.9                    9.7                4  
+## 6 Denmark                          7.8                    9.4                2.8
+## # i abbreviated name: 1: youth_unemployment_rate
+\end{verbatim}
+
+\textbf{Conclusion:}
+
+The union of all observations indicates we need to use full\_join to
+retain all observations.
+
+What key are you using for merging?
+
+We can use country as a unique key for merging, due to all the imported
+data inside the tibbles having one row per country and the measured
+variable for that country.
+
+Return the dimensions of the merged dataset:
+
+By using the dim() function on the resulting tibble we are returned the
+dimensions 227x4 indicating 227 rows with observations and 4 columns
+with variables.
+
+\subsection{c.~Enriching Data with Income
+Classification}\label{c.-enriching-data-with-income-classification}
+
+Obtain country income classification (low, lower-middle, upper-middle,
+high) from the
+\href{https://datahelpdesk.worldbank.org/knowledgebase/articles/906519}{World
+Bank} and merge it with the dataset.
+
+\begin{itemize}
+\item
+  Identify common variables between datasets. Can they be used for
+  merging? Why or why not?
+\item
+  Since ISO codes are standardized, download and use the
+  \href{https://www.cia.gov/the-world-factbook/references/country-data-codes/}{CIA
+  country data codes} for merging. Make sure you are not losing any of
+  the countries in your original data set when merging.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{country\_codes }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"Country Data Codes.csv"}\NormalTok{, }\AttributeTok{show\_col\_types =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}
+    \AttributeTok{country =}\NormalTok{ Name,}
+    \AttributeTok{iso\_code =}\NormalTok{ GENC}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(country, iso\_code) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{country =} \FunctionTok{str\_trim}\NormalTok{(country))}
+
+\NormalTok{country\_data\_codes }\OtherTok{\textless{}{-}}\NormalTok{ country\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(country\_codes, }\AttributeTok{by =} \StringTok{"country"}\NormalTok{)}
+\FunctionTok{glimpse}\NormalTok{(country\_codes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 278
+## Columns: 2
+## $ country  <chr> "Afghanistan", "Akrotiri", "Albania", "Algeria", "American Sa~
+## $ iso_code <chr> "AFG", "XQZ", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATA"~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(country\_codes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 2
+##   country        iso_code
+##   <chr>          <chr>   
+## 1 Afghanistan    AFG     
+## 2 Akrotiri       XQZ     
+## 3 Albania        ALB     
+## 4 Algeria        DZA     
+## 5 American Samoa ASM     
+## 6 Andorra        AND
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{income\_url }\OtherTok{\textless{}{-}} \StringTok{"https://ourworldindata.org/grapher/world{-}bank{-}income{-}groups.csv?v=1\&csvType=full\&useColumnShortNames=false"}
+
+\NormalTok{income\_classification }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(income\_url, }\AttributeTok{show\_col\_types =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Year }\SpecialCharTok{==} \DecValTok{2024}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{iso\_code =}\NormalTok{ Code, }
+         \AttributeTok{income\_status =} \StringTok{"World Bank\textquotesingle{}s income classification"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(iso\_code, income\_status)}
+\FunctionTok{glimpse}\NormalTok{(income\_classification)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 218
+## Columns: 2
+## $ iso_code      <chr> "AFG", "ALB", "DZA", "ASM", "AND", "AGO", "ATG", "ARG", ~
+## $ income_status <chr> "Low-income countries", "Upper-middle-income countries",~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(income\_classification)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 2
+##   iso_code income_status                
+##   <chr>    <chr>                        
+## 1 AFG      Low-income countries         
+## 2 ALB      Upper-middle-income countries
+## 3 DZA      Upper-middle-income countries
+## 4 ASM      High-income countries        
+## 5 AND      High-income countries        
+## 6 AGO      Lower-middle-income countries
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{country\_data\_income }\OtherTok{\textless{}{-}}\NormalTok{ country\_data\_codes }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(income\_classification, }\AttributeTok{by =} \StringTok{"iso\_code"}\NormalTok{)}
+\FunctionTok{glimpse}\NormalTok{(country\_data\_income)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 227
+## Columns: 6
+## $ country                 <chr> "Cuba", "Micronesia, Federated States of", "So~
+## $ education_expenditure   <dbl> 12.8, 12.5, 9.9, 8.8, 7.9, 7.8, 7.7, 7.7, 7.6,~
+## $ youth_unemployment_rate <dbl> 6.1, 18.9, 1.3, NA, 9.7, 9.4, 6.1, 9.4, 15.3, ~
+## $ net_migration_rate      <dbl> -3.7, -20.9, -1.6, 0.0, 4.0, 2.8, 3.3, -1.2, -~
+## $ iso_code                <chr> "CUB", "FSM", "SLB", "MSR", "NOR", "DNK", "ISL~
+## $ income_status           <chr> "Upper-middle-income countries", "Lower-middle~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(country\_data\_income)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 6
+##   country        education_expenditure youth_unemployment_r~1 net_migration_rate
+##   <chr>                          <dbl>                  <dbl>              <dbl>
+## 1 Cuba                            12.8                    6.1               -3.7
+## 2 Micronesia, F~                  12.5                   18.9              -20.9
+## 3 Solomon Islan~                   9.9                    1.3               -1.6
+## 4 Montserrat                       8.8                   NA                  0  
+## 5 Norway                           7.9                    9.7                4  
+## 6 Denmark                          7.8                    9.4                2.8
+## # i abbreviated name: 1: youth_unemployment_rate
+## # i 2 more variables: iso_code <chr>, income_status <chr>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{nrow}\NormalTok{(country\_data) }\SpecialCharTok{==} \FunctionTok{nrow}\NormalTok{(country\_data\_income)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\textbf{Conclusion:}
+
+We can obtain country income classification from the World Bank by
+directly calling read\_csv() with the url:
+\url{https://ourworldindata.org/grapher/world-bank-income-groups.csv?v=1&csvType=full&useColumnShortNames=false}
+. By doing so the .csv is directly loaded into R.
+
+Identify common variables between datasets. Can they be used for
+merging? Why or why not?
+
+By inspecting the ``Country Data Codes.csv'' and the
+``world-bank-income-group.csv'' loaded via the URL, we see that the GENC
+column and Code column are fitting for merging, due to the ISO/GENC
+country codes being standardized, therefore the risk of deviating
+variables is quite low. Country Name and Entity might appear similar but
+should not be used for merging, due to differences in pronunciation,
+spelling and naming conventions regarding country names.
+
+Since ISO codes are standardized, download and use the
+\href{https://www.cia.gov/the-world-factbook/references/country-data-codes/}{CIA
+country data codes} for merging. Make sure you are not losing any of the
+countries in your original data set when merging.
+
+By comparing the number of rows of the country\_data and the via
+left\_join enriched country\_data\_income tibbles we can check if any
+country rows were lost by joining. TRUE is returned, therefore both
+tibbles have the same number of rows. country\_data\_income now just
+contains the additional income classification information.
+
+\subsection{d.~Adding Geographical
+Information}\label{d.-adding-geographical-information}
+
+Introduce continent and subcontinent (or region) data for each country.
+
+\begin{itemize}
+\tightlist
+\item
+  Find and download an appropriate online resource.
+\item
+  Merge this information into the dataset, naming the final dataset
+  \texttt{df\_vars}. Make sure you are not losing any of the countries
+  in your original data set when merging.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{region\_subcontinent\_url }\OtherTok{\textless{}{-}} \StringTok{"https://ourworldindata.org/grapher/continents{-}according{-}to{-}our{-}world{-}in{-}data.csv?v=1\&csvType=full\&useColumnShortNames=false"}
+
+\NormalTok{region\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(region\_subcontinent\_url, }\AttributeTok{show\_col\_types =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{rename}\NormalTok{(}
+    \AttributeTok{country =}\NormalTok{ Entity,}
+    \AttributeTok{iso\_code =}\NormalTok{ Code,}
+    \AttributeTok{region =} \StringTok{"World region according to OWID"}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(iso\_code, region) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{distinct}\NormalTok{(iso\_code, }\AttributeTok{.keep\_all =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\# distinct due to iso\_code finding multiple fitting rows (many{-}to{-}many)}
+\FunctionTok{glimpse}\NormalTok{(region\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 258
+## Columns: 2
+## $ iso_code <chr> "AFG", "ALA", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATG"~
+## $ region   <chr> "Asia", "Europe", "Europe", "Africa", "Oceania", "Europe", "A~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(region\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 2
+##   iso_code region 
+##   <chr>    <chr>  
+## 1 AFG      Asia   
+## 2 ALA      Europe 
+## 3 ALB      Europe 
+## 4 DZA      Africa 
+## 5 ASM      Oceania
+## 6 AND      Europe
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_vars }\OtherTok{\textless{}{-}}\NormalTok{ country\_data\_income }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(region\_data, }\AttributeTok{by =} \StringTok{"iso\_code"}\NormalTok{)}
+\FunctionTok{glimpse}\NormalTok{(df\_vars)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 227
+## Columns: 7
+## $ country                 <chr> "Cuba", "Micronesia, Federated States of", "So~
+## $ education_expenditure   <dbl> 12.8, 12.5, 9.9, 8.8, 7.9, 7.8, 7.7, 7.7, 7.6,~
+## $ youth_unemployment_rate <dbl> 6.1, 18.9, 1.3, NA, 9.7, 9.4, 6.1, 9.4, 15.3, ~
+## $ net_migration_rate      <dbl> -3.7, -20.9, -1.6, 0.0, 4.0, 2.8, 3.3, -1.2, -~
+## $ iso_code                <chr> "CUB", "FSM", "SLB", "MSR", "NOR", "DNK", "ISL~
+## $ income_status           <chr> "Upper-middle-income countries", "Lower-middle~
+## $ region                  <chr> "North America", "Oceania", "Oceania", "North ~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(df\_vars)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 7
+##   country        education_expenditure youth_unemployment_r~1 net_migration_rate
+##   <chr>                          <dbl>                  <dbl>              <dbl>
+## 1 Cuba                            12.8                    6.1               -3.7
+## 2 Micronesia, F~                  12.5                   18.9              -20.9
+## 3 Solomon Islan~                   9.9                    1.3               -1.6
+## 4 Montserrat                       8.8                   NA                  0  
+## 5 Norway                           7.9                    9.7                4  
+## 6 Denmark                          7.8                    9.4                2.8
+## # i abbreviated name: 1: youth_unemployment_rate
+## # i 3 more variables: iso_code <chr>, income_status <chr>, region <chr>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{nrow}\NormalTok{(country\_data\_income) }\SpecialCharTok{==} \FunctionTok{nrow}\NormalTok{(df\_vars)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\textbf{Conclusion:}
+
+We can again use the website ``\url{https://ourworldindata.org}'' to
+find and download appropriate region and subcontinent data via url and
+the read\_csv() function.
+
+The distinct() function had to be used due to left\_join() resulting in
+some iso\_codes having multiple fitting rows in the
+region\_subcontinent\_data. This would result in a many-to-many
+relationship. By applying distinct() only unique rows are joined. Now
+country\_data\_income and df\_vars have the same number of rows as
+demonstrated by TRUE.
+
+\subsection{e. Data Tidiness and Summary
+Statistics}\label{e.-data-tidiness-and-summary-statistics}
+
+\begin{itemize}
+\tightlist
+\item
+  Evaluate the tidiness of \texttt{df\_vars} (observational units,
+  variables, fixed vs.~measured variables). Make adjustments to tidy the
+  data, if necessary.
+\end{itemize}
+
+A dataset is called tidy if following four criteria hold: 1. Each
+variable forms a column. 2. Each observation forms a row. 3. Each type
+of observational unit forms a table
+
+Furthermore Fixed variables should come before measured variables.
+
+We see in subtask d that the first three criteria are met. The
+observational units in our case are the countries and each collumn is a
+seperate variable. We should however rearrange the data a bit.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_vars }\OtherTok{\textless{}{-}}\NormalTok{ df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(iso\_code, country, region, income\_status, }\FunctionTok{everything}\NormalTok{())}
+\FunctionTok{head}\NormalTok{(df\_vars)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 7
+##   iso_code country                    region income_status education_expenditure
+##   <chr>    <chr>                      <chr>  <chr>                         <dbl>
+## 1 CUB      Cuba                       North~ Upper-middle~                  12.8
+## 2 FSM      Micronesia, Federated Sta~ Ocean~ Lower-middle~                  12.5
+## 3 SLB      Solomon Islands            Ocean~ Lower-middle~                   9.9
+## 4 MSR      Montserrat                 North~ <NA>                            8.8
+## 5 NOR      Norway                     Europe High-income ~                   7.9
+## 6 DNK      Denmark                    Europe High-income ~                   7.8
+## # i 2 more variables: youth_unemployment_rate <dbl>, net_migration_rate <dbl>
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Create a frequency table for the income status variable and briefly
+  interpret the results.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 2
+## # Groups:   income_status [5]
+##   income_status                     n
+##   <chr>                         <int>
+## 1 High-income countries            86
+## 2 Low-income countries             25
+## 3 Lower-middle-income countries    49
+## 4 Upper-middle-income countries    51
+## 5 <NA>                             16
+\end{verbatim}
+
+we see that high income countries are most common, followed by
+lower/upper middle income countries and at last low income countries.
+There are some without classification, which could be explained by the
+remotness and difficulty in assesing this in very small
+countries/islands.
+
+\begin{itemize}
+\tightlist
+\item
+  Analyze the distribution of income status across continents by
+  computing absolute and relative frequencies. Comment on the findings.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(region, income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{abs\_freq =} \FunctionTok{n}\NormalTok{(), }\AttributeTok{rel\_freq =} \FunctionTok{n}\NormalTok{()}\SpecialCharTok{/}\FunctionTok{nrow}\NormalTok{(df\_vars) ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(rel\_freq)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` has regrouped the output.
+## i Summaries were computed grouped by region and income_status.
+## i Output is grouped by region.
+## i Use `summarise(.groups = "drop_last")` to silence this message.
+## i Use `summarise(.by = c(region, income_status))` for per-operation grouping
+##   (`?dplyr::dplyr_by`) instead.
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 10 x 4
+## # Groups:   region [5]
+##    region        income_status                 abs_freq rel_freq
+##    <chr>         <chr>                            <int>    <dbl>
+##  1 Europe        High-income countries               39   0.172 
+##  2 Africa        Lower-middle-income countries       23   0.101 
+##  3 Africa        Low-income countries                21   0.0925
+##  4 North America High-income countries               20   0.0881
+##  5 Asia          Lower-middle-income countries       17   0.0749
+##  6 Asia          High-income countries               14   0.0617
+##  7 Asia          Upper-middle-income countries       13   0.0573
+##  8 North America Upper-middle-income countries       11   0.0485
+##  9 Oceania       High-income countries                9   0.0396
+## 10 Africa        Upper-middle-income countries        8   0.0352
+\end{verbatim}
+
+We observe that most high income countries are in Europe, most low and
+lower-middle income countries are in Africa and most upper-middle income
+countries are in Asia
+
+\begin{itemize}
+\tightlist
+\item
+  Using the distribution of income status across continents, identify
+  which countries are the only ones in their income group across the
+  continent. Discuss briefly.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(region, income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\FunctionTok{n}\NormalTok{() }\SpecialCharTok{==} \DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(country, region, income\_status)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 3
+## # Groups:   region, income_status [3]
+##   country    region        income_status                
+##   <chr>      <chr>         <chr>                        
+## 1 Bolivia    South America Lower-middle-income countries
+## 2 Seychelles Africa        High-income countries        
+## 3 Venezuela  South America <NA>
+\end{verbatim}
+
+We see that Bolivia is the only lower-middle-income country in South
+America. Moreover the Seychelles is somewhat surprisingly the only
+High-income country in Africa, which could be because of their role as a
+tax haven. Lastly, Venezuela is the only country in South America
+without classification, which could be caused by the tense political and
+economical situation there.
+
+\subsection{f.~Further Summary Statistics and
+Insights}\label{f.-further-summary-statistics-and-insights}
+
+\begin{itemize}
+\tightlist
+\item
+  Create a table of average (mean and median) values for expenditure,
+  youth unemployment rate and net migration rate separated into income
+  status. Make sure that in the output, the ordering of the income
+  classes is proper (i.e., L, LM, UM, H or the other way around).
+  Briefly comment the results and any differences between the mean and
+  median.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_vars }\OtherTok{\textless{}{-}}\NormalTok{ df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{income\_status =} \FunctionTok{factor}\NormalTok{(income\_status, }
+                                \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Low{-}income countries"}\NormalTok{, }
+                                           \StringTok{"Lower{-}middle{-}income countries"}\NormalTok{, }
+                                           \StringTok{"Upper{-}middle{-}income countries"}\NormalTok{, }
+                                           \StringTok{"High{-}income countries"}\NormalTok{)))}
+
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(income\_status)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{c}\NormalTok{(education\_expenditure, youth\_unemployment\_rate, net\_migration\_rate),}
+                   \FunctionTok{list}\NormalTok{(}\AttributeTok{mean =} \SpecialCharTok{\textasciitilde{}}\FunctionTok{mean}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }
+                        \AttributeTok{median =} \SpecialCharTok{\textasciitilde{}}\FunctionTok{median}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 7
+##   income_status                 education_expenditure_m~1 education_expenditur~2
+##   <fct>                                             <dbl>                  <dbl>
+## 1 Low-income countries                               3.53                    3.1
+## 2 Lower-middle-income countries                      4.43                    3.9
+## 3 Upper-middle-income countries                      4.52                    4.1
+## 4 High-income countries                              4.6                     4.7
+## # i abbreviated names: 1: education_expenditure_mean,
+## #   2: education_expenditure_median
+## # i 4 more variables: youth_unemployment_rate_mean <dbl>,
+## #   youth_unemployment_rate_median <dbl>, net_migration_rate_mean <dbl>,
+## #   net_migration_rate_median <dbl>
+\end{verbatim}
+
+The table shows that the mean youth unemployment rate is higher than the
+median, suggesting a right skewed distribution, coming from the fact
+that a few countries with extremly high unemployment rate pull the
+average up. Net migration also shows a clear trend, high income
+countries tend to have positive net migration (influx of people) while
+low income countries have a negative net migration in general (people
+leaving). The differences between mean and median again highlight the
+presence of extreme outliers.
+
+\begin{itemize}
+\tightlist
+\item
+  Look at the standard deviation and the interquartile range of the
+  variables per income status instead of the location statistics above.
+  Do you gain additional insights? Briefly comment the results.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(income\_status)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{c}\NormalTok{(education\_expenditure, youth\_unemployment\_rate, net\_migration\_rate),}
+                   \FunctionTok{list}\NormalTok{(}\AttributeTok{stand\_dev =} \SpecialCharTok{\textasciitilde{}}\FunctionTok{sd}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+                        \AttributeTok{iqr =} \SpecialCharTok{\textasciitilde{}}\FunctionTok{IQR}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 7
+##   income_status                 education_expenditure_s~1 education_expenditur~2
+##   <fct>                                             <dbl>                  <dbl>
+## 1 Low-income countries                               1.73                   2.65
+## 2 Lower-middle-income countries                      2.24                   2.55
+## 3 Upper-middle-income countries                      1.80                   1.68
+## 4 High-income countries                              1.49                   1.8 
+## # i abbreviated names: 1: education_expenditure_stand_dev,
+## #   2: education_expenditure_iqr
+## # i 4 more variables: youth_unemployment_rate_stand_dev <dbl>,
+## #   youth_unemployment_rate_iqr <dbl>, net_migration_rate_stand_dev <dbl>,
+## #   net_migration_rate_iqr <dbl>
+\end{verbatim}
+
+We see that youth unemployment varies substantially across all groups,
+meaning income status alone does not guarantee a stable youth labor
+market. Similarly the high migration rate standard deviation indicates
+differing behavior from countries in high income groups, despite the
+mean being high in this group.
+
+\begin{itemize}
+\tightlist
+\item
+  Extend the analysis of the statistics median and IQR to \textbf{each
+  income status and continent combination}. Play around with displaying
+  the resulting table. Use \texttt{pivot\_longer()} and/or
+  \texttt{pivot\_wider()} to generate different outputs. Discuss the
+  results as well as the readability of the different tables.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stat\_table }\OtherTok{\textless{}{-}}\NormalTok{ df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(income\_status) }\SpecialCharTok{\&} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(region)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(region, income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{c}\NormalTok{(education\_expenditure, youth\_unemployment\_rate, net\_migration\_rate),}
+                   \FunctionTok{list}\NormalTok{(}\AttributeTok{median =} \SpecialCharTok{\textasciitilde{}}\FunctionTok{median}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }
+                        \AttributeTok{iqr =} \SpecialCharTok{\textasciitilde{}}\FunctionTok{IQR}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` has regrouped the output.
+## i Summaries were computed grouped by region and income_status.
+## i Output is grouped by region.
+## i Use `summarise(.groups = "drop_last")` to silence this message.
+## i Use `summarise(.by = c(region, income_status))` for per-operation grouping
+##   (`?dplyr::dplyr_by`) instead.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(stat\_table)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 8
+## # Groups:   region [2]
+##   region income_status             education_expenditur~1 education_expenditur~2
+##   <chr>  <fct>                                      <dbl>                  <dbl>
+## 1 Africa Low-income countries                        2.95                   2.82
+## 2 Africa Lower-middle-income coun~                   3.55                   2.05
+## 3 Africa Upper-middle-income coun~                   4.95                   1.33
+## 4 Africa High-income countries                       4.4                    0   
+## 5 Asia   Low-income countries                        4.1                    0   
+## 6 Asia   Lower-middle-income coun~                   3.45                   2.8 
+## # i abbreviated names: 1: education_expenditure_median,
+## #   2: education_expenditure_iqr
+## # i 4 more variables: youth_unemployment_rate_median <dbl>,
+## #   youth_unemployment_rate_iqr <dbl>, net_migration_rate_median <dbl>,
+## #   net_migration_rate_iqr <dbl>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{long\_table }\OtherTok{\textless{}{-}}\NormalTok{ stat\_table }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(region, income\_status), }\AttributeTok{values\_to =} \StringTok{"value"}\NormalTok{, }\AttributeTok{names\_to =} \StringTok{"metric"}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(long\_table)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 4
+## # Groups:   region [1]
+##   region income_status        metric                         value
+##   <chr>  <fct>                <chr>                          <dbl>
+## 1 Africa Low-income countries education_expenditure_median    2.95
+## 2 Africa Low-income countries education_expenditure_iqr       2.82
+## 3 Africa Low-income countries youth_unemployment_rate_median  8.7 
+## 4 Africa Low-income countries youth_unemployment_rate_iqr    12.4 
+## 5 Africa Low-income countries net_migration_rate_median      -0.9 
+## 6 Africa Low-income countries net_migration_rate_iqr          3.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wide\_table }\OtherTok{\textless{}{-}}\NormalTok{ long\_table }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{( }\AttributeTok{names\_from =} \StringTok{"income\_status"}\NormalTok{, }\AttributeTok{values\_from =} \StringTok{"value"}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(wide\_table)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 6
+## # Groups:   region [1]
+##   region metric                    `Low-income countries` Lower-middle-income ~1
+##   <chr>  <chr>                                      <dbl>                  <dbl>
+## 1 Africa education_expenditure_me~                   2.95                   3.55
+## 2 Africa education_expenditure_iqr                   2.82                   2.05
+## 3 Africa youth_unemployment_rate_~                   8.7                   16.5 
+## 4 Africa youth_unemployment_rate_~                  12.4                   22.2 
+## 5 Africa net_migration_rate_median                  -0.9                   -0.4 
+## 6 Africa net_migration_rate_iqr                      3.2                    1.65
+## # i abbreviated name: 1: `Lower-middle-income countries`
+## # i 2 more variables: `Upper-middle-income countries` <dbl>,
+## #   `High-income countries` <dbl>
+\end{verbatim}
+
+The standard summarise output is a wide table with many columns which
+could be difficult to read. We transform it first to a long format,
+which is less intuitive for humans to read but more suitable for further
+analysis and plotting. Lastly we transform it to another wide table,
+which is much easier to read for comparative analysis.
+
+\begin{itemize}
+\tightlist
+\item
+  Identify countries performing well in terms of both \textbf{youth
+  unemployment} and \textbf{net migration rate} (top 25\% in net
+  migration and bottom 25\% in youth unemployment within their
+  continent).
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(region) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(net\_migration\_rate }\SpecialCharTok{\textgreater{}=} \FunctionTok{quantile}\NormalTok{(net\_migration\_rate, }\FloatTok{0.75}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\&}
+\NormalTok{         youth\_unemployment\_rate }\SpecialCharTok{\textless{}=} \FunctionTok{quantile}\NormalTok{(youth\_unemployment\_rate, }\FloatTok{0.25}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(region, country, youth\_unemployment\_rate, net\_migration\_rate) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(region, youth\_unemployment\_rate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 18 x 4
+## # Groups:   region [6]
+##    region        country              youth_unemployment_rate net_migration_rate
+##    <chr>         <chr>                                  <dbl>              <dbl>
+##  1 Africa        Madagascar                               1                  0  
+##  2 Africa        Guinea                                   1                  0  
+##  3 Africa        Togo                                     3.9                0  
+##  4 Africa        Cote d'Ivoire                            5.5                1.2
+##  5 Africa        Benin                                    5.6                0.3
+##  6 Asia          Qatar                                    0.4                6.5
+##  7 Asia          Kazakhstan                               3.8                0.4
+##  8 Asia          Macau                                    5.3                3.3
+##  9 Asia          Bahrain                                  5.3               10.6
+## 10 Asia          United Arab Emirates                     6.9                7.6
+## 11 Europe        Switzerland                              7.9                4.6
+## 12 Europe        Malta                                    9.1                6.6
+## 13 Europe        Norway                                   9.7                4  
+## 14 North America United States                            8.6                3  
+## 15 Oceania       Papua New Guinea                         3.6                0  
+## 16 Oceania       Palau                                    5.6                0.9
+## 17 South America Ecuador                                  7.9                0  
+## 18 South America Suriname                                13.4                0.5
+\end{verbatim}
+
+\subsection{g. Conditional
+Probabilities}\label{g.-conditional-probabilities}
+
+Estimate the following based on the observed frequencies in the data:
+
+\begin{itemize}
+\tightlist
+\item
+  What is the (posterior or conditional) probability that a European
+  country belongs to the high income group? What is the prior
+  probability that a country belongs to the high income group?
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Probability of a country being High Income given it is European}
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(region }\SpecialCharTok{==} \StringTok{"Europe"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{summarise}\NormalTok{(}\AttributeTok{Pct\_European\_High\_Income =} \DecValTok{100}\SpecialCharTok{*}\FunctionTok{mean}\NormalTok{(income\_status }\SpecialCharTok{==} \StringTok{"High{-}income countries"}\NormalTok{,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 1
+##   Pct_European_High_Income
+##                      <dbl>
+## 1                     84.8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Probability of any country being High Income}
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{summarise}\NormalTok{(}\AttributeTok{Pct\_Global\_High\_Income =} \DecValTok{100}\SpecialCharTok{*}\FunctionTok{mean}\NormalTok{(income\_status }\SpecialCharTok{==} \StringTok{"High{-}income countries"}\NormalTok{,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 1
+##   Pct_Global_High_Income
+##                    <dbl>
+## 1                   40.8
+\end{verbatim}
+
+We can observe that the conditional probability is more than double the
+unconditional. This is unsurprising as many of the worlds highest income
+countries are located in Europe.
+
+\begin{itemize}
+\tightlist
+\item
+  Given a country has high youth unemployment (above \%25), what is the
+  probability that it also has negative net migration?
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Probability of a country having negative net migration given it has high youth unemployment}
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(youth\_unemployment\_rate }\SpecialCharTok{\textgreater{}} \DecValTok{25}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{summarise}\NormalTok{(}\AttributeTok{Pct\_Negative\_Net\_Migration =} \DecValTok{100}\SpecialCharTok{*}\FunctionTok{mean}\NormalTok{(net\_migration\_rate }\SpecialCharTok{\textless{}} \DecValTok{0}\NormalTok{,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 1
+##   Pct_Negative_Net_Migration
+##                        <dbl>
+## 1                       61.2
+\end{verbatim}
+
+The conditional probability is around 61\%.
+
+\subsection{h. Simpson's Paradox
+Analysis}\label{h.-simpsons-paradox-analysis}
+
+Investigate whether an overall trend in youth unemployment rate in the
+high and low income groups reverses when analyzed at the continent
+level. E.g., does the youth unemployment rate appear lower in low-income
+countries overall, but higher when controlling for continent? Explain
+the results and possible reasons behind this paradox.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Overall trend for income groups}
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+ \FunctionTok{drop\_na}\NormalTok{(income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_youth\_unemployment\_rate =} \FunctionTok{mean}\NormalTok{(youth\_unemployment\_rate,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 2
+##   income_status                 mean_youth_unemployment_rate
+##   <fct>                                                <dbl>
+## 1 Low-income countries                                  14.9
+## 2 Lower-middle-income countries                         15.8
+## 3 Upper-middle-income countries                         21.6
+## 4 High-income countries                                 16.5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Trend for different continents}
+\NormalTok{df\_vars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{drop\_na}\NormalTok{(income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ region, }\AttributeTok{values\_from =}\NormalTok{ youth\_unemployment\_rate, }
+               \AttributeTok{names\_prefix =} \StringTok{"Youth\_UNEMP\_"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{group\_by}\NormalTok{(income\_status) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{summarise}\NormalTok{(}\AttributeTok{AvY\_UN\_North\_America =} \FunctionTok{mean}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Youth\_UNEMP\_North America}\StringTok{\textasciigrave{}}\NormalTok{,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{),}
+                \AttributeTok{AvY\_UN\_Oceania       =} \FunctionTok{mean}\NormalTok{(Youth\_UNEMP\_Oceania,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{),}
+                \AttributeTok{AvY\_UN\_Europe        =} \FunctionTok{mean}\NormalTok{(Youth\_UNEMP\_Europe,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{),}
+                \AttributeTok{AvY\_UN\_Africa        =} \FunctionTok{mean}\NormalTok{(Youth\_UNEMP\_Africa,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{),}
+                \AttributeTok{AvY\_UN\_South\_America =} \FunctionTok{mean}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Youth\_UNEMP\_South America}\StringTok{\textasciigrave{}}\NormalTok{,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{),}
+                \AttributeTok{AvY\_UN\_Asia          =} \FunctionTok{mean}\NormalTok{(Youth\_UNEMP\_Asia,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kbl}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tabular}[t]{l|r|r|r|r|r|r}
+\hline
+income\_status & AvY\_UN\_North\_America & AvY\_UN\_Oceania & AvY\_UN\_Europe & AvY\_UN\_Africa & AvY\_UN\_South\_America & AvY\_UN\_Asia\\
+\hline
+Low-income countries & NaN & NaN & NaN & 12.63333 & NaN & 25.96667\\
+\hline
+Lower-middle-income countries & 9.60000 & 10.22500 & NaN & 19.16190 & 6.90000 & 13.86429\\
+\hline
+Upper-middle-income countries & 15.85000 & 19.72500 & 22.95714 & 37.82857 & 17.31429 & 18.18182\\
+\hline
+High-income countries & 19.41818 & 25.71429 & 15.50571 & 11.60000 & 21.83333 & 11.03846\\
+\hline
+\end{tabular}
+
+The overall trend is that low income countries have lower youth
+unemployment rates and especially upper-middle-income countries have a
+very high youth unemployment rate.
+
+When analy \#\# i. Data Export
+
+Export the final tidy dataset from e. as a \textbf{CSV} with:\texttt{;}
+as a separator; \texttt{.} representing missing values; no row names
+included. Upload the \texttt{.csv} to TUWEL, together with the
+submission.
+
+\end{document}

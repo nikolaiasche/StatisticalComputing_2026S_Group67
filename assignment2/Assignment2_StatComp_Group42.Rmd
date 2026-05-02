@@ -38,6 +38,8 @@ library(dplyr)
 library(readr)
 library(stringr)
 library(tibble)
+library(tidyr)
+library(kableExtra)
 
 # Load rawdata_369.txt (public expenditure on education)
 education_data <- read_lines("rawdata_369.txt", skip = 2)
@@ -316,13 +318,72 @@ df_vars %>%
 Estimate the following based on the observed frequencies in the data:
 
 -   What is the (posterior or conditional) probability that a European country belongs to the high income group? What is the prior probability that a country belongs to the high income group?
+```{r}
+# Probability of a country being High Income given it is European
+df_vars %>%
+  filter(region == "Europe") %>%
+   summarise(Pct_European_High_Income = 100*mean(income_status == "High-income countries",na.rm=TRUE))
+
+# Probability of any country being High Income
+df_vars %>%
+   summarise(Pct_Global_High_Income = 100*mean(income_status == "High-income countries",na.rm=TRUE))
+
+```
+We can observe that the conditional probability is more than double the unconditional. This is unsurprising as many of the worlds highest income countries are located in Europe.
 
 -   Given a country has high youth unemployment (above %25), what is the probability that it also has negative net migration?
+```{r}
+# Probability of a country having negative net migration given it has high youth unemployment
+df_vars %>%
+  filter(youth_unemployment_rate > 25) %>%
+   summarise(Pct_Negative_Net_Migration = 100*mean(net_migration_rate < 0,na.rm=TRUE))
+```
+The conditional probability is around 61%.
 
 ## h. Simpson’s Paradox Analysis
 
 Investigate whether an overall trend in youth unemployment rate in the high and low income groups reverses when analyzed at the continent level. E.g., does the youth unemployment rate appear lower in low-income countries overall, but higher when controlling for continent? Explain the results and possible reasons behind this paradox.
+```{r}
+# Overall trend for income groups
+df_vars %>%
+ drop_na(income_status) %>%
+  group_by(income_status) %>%
+    summarise(mean_youth_unemployment_rate = mean(youth_unemployment_rate,na.rm=TRUE))
+
+# Trend for different continents
+df_vars %>%
+  drop_na(income_status) %>%
+   pivot_wider(names_from = region, values_from = youth_unemployment_rate, 
+               names_prefix = "Youth_UNEMP_") %>%
+    group_by(income_status) %>%
+      summarise(North_America = mean(`Youth_UNEMP_North America`,na.rm=TRUE),
+                Oceania       = mean(Youth_UNEMP_Oceania,na.rm=TRUE),
+                Europe        = mean(Youth_UNEMP_Europe,na.rm=TRUE),
+                Africa        = mean(Youth_UNEMP_Africa,na.rm=TRUE),
+                South_America = mean(`Youth_UNEMP_South America`,na.rm=TRUE),
+                Asia          = mean(Youth_UNEMP_Asia,na.rm=TRUE)) %>%
+       kbl(caption = "Average Youth Unemployment per income group and continent") %>%
+        kable_styling()
+    
+```
+
+The overall trend is that low-income countries have lower youth unemployment rates and especially upper-middle-income countries have a very high youth unemployment rate. 
+
+This general trend largely holds for the individual continents except for Asia and Africa. In Asia the low-income countries have the highest youth unemployment rate, this is however offset in the aggregate by African low-income countries which outnumber the Asian ones by a landslide. In Africa high-income countries have the lowest youth unemployment rate, however in the aggregate this is also offset because Africa has very little high-income countries.
+
+Proof of the argument above:
+```{r}
+df_vars %>%
+  drop_na(income_status) %>%
+   filter(region %in% c("Africa","Asia")) %>%
+    group_by(region) %>%
+     count(income_status)
+```
 
 ## i. Data Export
 
 Export the final tidy dataset from e. as a **CSV** with:`;` as a separator; `.` representing missing values; no row names included. Upload the `.csv` to TUWEL, together with the submission.
+```{r}
+write.csv2(df_vars, file = "assignment2_final_data.csv", row.names = FALSE, na = ".")
+```
+
