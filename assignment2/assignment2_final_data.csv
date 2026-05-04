@@ -84,7 +84,7 @@
 "NIC";"Nicaragua";"North America";"Lower-middle-income countries";4,4;8,5;-2,4
 "SYC";"Seychelles";"Africa";"High-income countries";4,4;11,6;1
 "KOR";"Korea, South";"Asia";"High-income countries";4,3;10,2;2,3
-.;"Turkey";"Asia";.;4,3;20,2;-4,3
+"TUR";"Turkey (Turkiye)";"Asia";"Upper-middle-income countries";4,3;20,2;-4,3
 "MYS";"Malaysia";"Asia";"Upper-middle-income countries";4,2;10,5;-0,3
 "WSM";"Samoa";"Oceania";"Upper-middle-income countries";4,2;31,9;-8,1
 "ESP";"Spain";"Europe";"High-income countries";4,2;34,3;7
@@ -172,7 +172,7 @@
 "PYF";"French Polynesia";"Oceania";"High-income countries";.;56,7;-0,7
 "XKS";"Kosovo";.;.;.;55,4;-1,8
 "LBY";"Libya";"Africa";"Upper-middle-income countries";.;48,7;-0,7
-.;"Macedonia";"Asia";.;.;45,4;0,4
+"MKD";"North Macedonia";"Europe";"Upper-middle-income countries";.;45,4;0,4
 "GRC";"Greece";"Europe";"High-income countries";.;39,9;0,9
 "DZA";"Algeria";"Africa";"Upper-middle-income countries";.;39,3;-0,9
 "NCL";"New Caledonia";"Oceania";"High-income countries";.;38,4;3,8
