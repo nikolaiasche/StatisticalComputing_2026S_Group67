@@ -1,0 +1,443 @@
+---
+title: "Case Study 2"
+author: "Crasnianec Oliver, Kovsca Lorenz, Asche Nikolai"
+date: "2026-04-02"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readr)
+library(stringr)
+library(tibble)
+library(tidyr)
+library(kableExtra)
+```
+
+*The .Rmd* **and** *.html (or .pdf) should be uploaded in TUWEL by the deadline. Refrain from using explanatory comments in the R code chunks but write them as text instead. Points will be deducted if the submitted file is not in a decent form.*
+
+**DISCLAIMER**: In case students did not contribute equally, include a disclaimer stating what each student's contribution was.
+
+The CIA World Factbook provides intelligence on various aspects of 266 world entities, including history, people, government, economy, energy, geography, environment, communications, transportation, military, terrorism, and transnational issues. This case study involves analyzing world data from 2020, focusing on:
+
+- **Education Expenditure (% of GDP)**
+- **Youth Unemployment Rate (15-24 years)**
+- **Net Migration Rate** (difference between the number of people entering and leaving a country per 1,000 persons)
+
+The data was sourced from the [CIA World Factbook Archives](https://www.cia.gov/the-world-factbook/about/archives/). You are required to use `dplyr` for data manipulation, while any package can be used for importing data.
+
+\begin{table}[ht]
+\centering
+\caption{You can use and extend this table to specify your AI usage (if used at all).}
+\begin{tabular}{p{0.75\textwidth} p{0.15\textwidth}}
+\toprule
+\textbf{AI usage} & \textbf{Task a}\\
+\midrule
+\textit{ChatGPT 5.3: Recommending code snippets for importing data from .txt with many white spaces between columns}
+& medium \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+# Tasks:
+
+## a. Data Import and Cleaning
+
+Load the following datasets from TUWEL and ensure that missing values are handled correctly and column names are clear. Each dataset should ultimately contain only two columns: **country** and the respective variable. Note that some data sets also contain information on the year when the value was last updated.
+
+- `rawdata_369.txt` which contains the (estimated) public expenditure on education as a percent of GDP. *Pay attention! The delimiter is 2 or more white spaces (one space would not work as it would separate country names which contain a space); you have to skip the first two lines*.
+
+- `rawdata_373.csv` which contains the (estimated) youth unemployment rate (15-24) per country
+
+- `rawdata_347.txt` which contains (estimated) net migration rate per country.
+
+```{r}
+education_data <- read_lines("rawdata_369.txt", skip = 2)
+
+education_expenditure <- tibble(
+  country = substr(education_data, 9, 72),
+  education_expenditure = as.numeric(substr(education_data, 73, 84))
+) %>%
+  mutate(country = str_trim(country))
+glimpse(education_expenditure)
+
+youth_unemployment_rate <- read_csv("rawdata_373.csv", show_col_types = FALSE) %>%
+  rename(
+    country = country_name,
+    youth_unemployment_rate = youth_unempl_rate
+  ) %>%
+  mutate(country = str_trim(country))
+glimpse(youth_unemployment_rate)
+
+migration_data <- read_lines("rawdata_347.txt", skip = 2)
+
+net_migration_rate <- tibble(
+  country = str_trim(substr(migration_data, 9, 72)),
+  net_migration_rate = as.numeric(substr(migration_data, 73, 84))
+) %>%
+  mutate(country = str_trim(country))
+glimpse(net_migration_rate)
+```
+
+**Conclusion:**
+
+The files rawdata_369.txt and rawdata_347 contain a lot of white spaces between the columns. In order to correctly import the data, we can not blindly use the read_table function, but we first call read_lines and then substring the appropriate data from the lines into the fitting column and finally trim country in order to get rid of the tailing white spaces.
+
+## b. Merging Raw Data
+
+Merge the datasets using `dplyr` on a unique key and retain the union of all observations.
+
+- What key are you using for merging?
+- Return the dimensions of the merged dataset.
+
+```{r}
+country_data <- education_expenditure %>%
+  full_join(youth_unemployment_rate, by = "country") %>%
+  full_join(net_migration_rate, by = "country")
+dim(country_data)
+glimpse(country_data)
+head(country_data)
+```
+
+**Conclusion:**
+
+The union of all observations indicates we need to use full_join to retain all observations.
+
+What key are you using for merging?
+
+We can use country as a unique key for merging, due to all the imported data inside the tibbles having one row per country and the measured variable for that country.
+
+Return the dimensions of the merged dataset:
+
+By using the dim() function on the resulting tibble we are returned the dimensions 227x4 indicating 227 rows with observations and 4 columns with variables.
+
+## c. Enriching Data with Income Classification
+
+Obtain country income classification (low, lower-middle, upper-middle, high) from the [World Bank](https://datahelpdesk.worldbank.org/knowledgebase/articles/906519) and merge it with the dataset.
+
+- Identify common variables between datasets. Can they be used for merging? Why or why not?
+
+- Since ISO codes are standardized, download and use the [CIA country data codes](https://www.cia.gov/the-world-factbook/references/country-data-codes/) for merging. Make sure you are not losing any of the countries in your original data set when merging.
+
+```{r}
+country_codes <- read_csv("Country Data Codes.csv", show_col_types = FALSE) %>%
+  rename(
+    country = Name,
+    iso_code = GENC
+  ) %>%
+  select(country, iso_code) %>%
+  mutate(country = str_trim(country))
+
+country_data_fixed <- country_data %>%
+  mutate(country = recode(country,
+    "Turkey" = "Turkey (Turkiye)",
+    "Macedonia" = "North Macedonia"
+  ))
+
+country_data_codes <- country_data_fixed %>%
+  left_join(country_codes, by = "country")
+glimpse(country_codes)
+head(country_codes)
+
+income_url <- paste0("https://ourworldindata.org/grapher/world-bank-income-groups.csv",
+                     "?v=1&csvType=full&useColumnShortNames=false")
+
+income_classification <- read_csv(income_url, show_col_types = FALSE) %>%
+  filter(Year == 2024) %>%
+  rename(iso_code = Code, 
+         income_status = "World Bank's income classification") %>%
+  select(iso_code, income_status)
+
+glimpse(income_classification)
+head(income_classification)
+
+country_data_income <- country_data_codes %>%
+  left_join(income_classification, by = "iso_code")
+
+glimpse(country_data_income)
+head(country_data_income)
+
+country_data_income %>%
+  filter(is.na(income_status)) %>%
+  select(country, iso_code)
+
+nrow(country_data) == nrow(country_data_income)
+```
+
+**Conclusion:** I had to manually adjust the country names "Turkey" and "Macedonia" in country_data before joining, because they are listed as "Turkey (Turkiye)" and "North Macedonia" in the CIA country data codes.
+
+We can obtain country income classification from the World Bank by directly calling read_csv() with the url: <https://ourworldindata.org/grapher/world-bank-income-groups.csv?v=1&csvType=full&useColumnShortNames=false> . By doing so the .csv is directly loaded into R.
+
+Identify common variables between datasets. Can they be used for merging? Why or why not? By inspecting the "Country Data Codes.csv" and the World Bank income classification data loaded via the URL, we see that the GENC column and the Code column are suitable for merging, because ISO/GENC country codes are standardized. Country names such as Name and Entity may appear similar, but should not be used for merging because naming conventions can differ between data sources.
+
+Since ISO codes are standardized, download and use the CIA country data codes for merging. Make sure you are not losing any of the countries in your original data set when merging.
+
+After joining the CIA country codes, no countries were missing an ISO code. Some observations still have missing income_status values after merging with the World Bank income classification. These are mainly territories, special regions, or countries not classified in the World Bank income group data, such as Gaza Strip, West Bank, Anguilla, Jersey and Guernsey. Since a left_join was used, these observations remain in the dataset and are not lost.
+
+## d. Adding Geographical Information
+
+Introduce continent and subcontinent (or region) data for each country.
+
+- Find and download an appropriate online resource.
+- Merge this information into the dataset, naming the final dataset `df_vars`. Make sure you are not losing any of the countries in your original data set when merging.
+
+```{r}
+region_subcontinent_url <- paste0("https://ourworldindata.org/grapher/continents-",
+                                  "according-to-our-world",
+                                  "-in-data.csv?v=1&csvType=full&",
+                                  "useColumnShortNames=false")
+
+region_data <- read_csv(region_subcontinent_url, show_col_types = FALSE) %>%
+    rename(
+    country = Entity,
+    iso_code = Code,
+    region = "World region according to OWID"
+  ) %>%
+  select(iso_code, region) %>%
+  distinct(iso_code, .keep_all = TRUE)
+glimpse(region_data)
+head(region_data)
+
+df_vars <- country_data_income %>%
+  left_join(region_data, by = "iso_code")
+glimpse(df_vars)
+head(df_vars)
+
+nrow(country_data_income) == nrow(df_vars)
+```
+
+**Conclusion:**
+
+We can again use the website "<https://ourworldindata.org>" to find and download appropriate region and subcontinent data via url and the read_csv() function.
+
+The distinct() function had to be used due to left_join() resulting in some iso_codes having multiple fitting rows in the region_subcontinent_data. This would result in a many-to-many relationship. By applying distinct() only unique rows are joined. Now country_data_income and df_vars have the same number of rows as demonstrated by TRUE.
+
+## e. Data Tidiness and Summary Statistics
+
+- Evaluate the tidiness of `df_vars` (observational units, variables, fixed vs. measured variables). Make adjustments to tidy the data, if necessary.
+
+**Conclusion:**
+
+A dataset is called tidy if following four criteria hold: 1. Each variable forms a column. 2. Each observation forms a row. 3. Each type of observational unit forms a table
+
+Furthermore Fixed variables should come before measured variables.
+
+We see in subtask d that the first three criteria are met. The observational units in our case are the countries and each collumn is a seperate variable. We should however rearrange the data a bit.
+
+```{r}
+df_vars <- df_vars %>%
+  select(iso_code, country, region, income_status, everything())
+head(df_vars)
+```
+
+- Create a frequency table for the income status variable and briefly interpret the results.
+
+```{r}
+df_vars %>%
+  group_by(income_status) %>%
+  count()
+```
+
+**Conclusion:**
+
+We see that high income countries are most common, followed by lower/upper middle income countries and at last low income countries. There are some without classification, which could be explained by the remotness and difficulty in assesing this in very small countries/islands.
+
+- Analyze the distribution of income status across continents by computing absolute and relative frequencies. Comment on the findings.
+
+```{r}
+df_vars %>%
+  group_by(region, income_status) %>%
+  summarise(abs_freq = n(), rel_freq = n()/nrow(df_vars) ) %>%
+  arrange(desc(rel_freq)) %>%
+  head(10)
+```
+
+**Conclusion:**
+
+We observe that most high income countries are in Europe, most low and lower-middle income countries are in Africa and most upper-middle income countries are in Asia
+
+- Using the distribution of income status across continents, identify which countries are the only ones in their income group across the continent. Discuss briefly.
+
+```{r}
+df_vars %>% 
+  group_by(region, income_status) %>%
+  filter(n() == 1) %>%
+  select(country, region, income_status)
+```
+
+**Conclusion:**
+
+We see that Bolivia is the only lower-middle-income country in South America. Moreover the Seychelles is somewhat surprisingly the only High-income country in Africa, which could be because of their role as a tax haven. Lastly, Venezuela is the only country in South America without classification, which could be caused by the tense political and economical situation there.
+
+## f. Further Summary Statistics and Insights
+
+- Create a table of average (mean and median) values for expenditure, youth unemployment rate and net migration rate separated into income status. Make sure that in the output, the ordering of the income classes is proper (i.e., L, LM, UM, H or the other way around). Briefly comment the results and any differences between the mean and median.
+
+```{r}
+df_vars <- df_vars %>%
+  mutate(income_status = factor(income_status, 
+                                levels = c("Low-income countries", 
+                                           "Lower-middle-income countries", 
+                                           "Upper-middle-income countries", 
+                                           "High-income countries")))
+
+df_vars %>%
+  filter(!is.na(income_status)) %>%
+  group_by(income_status) %>%
+  summarise(across(c(education_expenditure, youth_unemployment_rate, net_migration_rate),
+                   list(mean = ~mean(.x, na.rm = TRUE), 
+                        median = ~median(.x, na.rm = TRUE))))
+
+```
+
+**Conclusion:**
+
+The table shows that the mean youth unemployment rate is higher than the median, suggesting a right skewed distribution, coming from the fact that a few countries with extremly high unemployment rate pull the average up. Net migration also shows a clear trend, high income countries tend to have positive net migration (influx of people) while low income countries have a negative net migration in general (people leaving). The differences between mean and median again highlight the presence of extreme outliers.
+
+- Look at the standard deviation and the interquartile range of the variables per income status instead of the location statistics above. Do you gain additional insights? Briefly comment the results.
+
+```{r}
+df_vars %>%
+  filter(!is.na(income_status)) %>%
+  group_by(income_status) %>%
+  summarise(across(c(education_expenditure, youth_unemployment_rate, net_migration_rate),
+                   list(stand_dev = ~sd(.x, na.rm = TRUE),
+                        iqr = ~IQR(.x, na.rm = TRUE))))
+  
+```
+
+**Conclusion:**
+
+We see that youth unemployment varies substantially across all groups, meaning income status alone does not guarantee a stable youth labor market. Similarly the high migration rate standard deviation indicates differing behavior from countries in high income groups, despite the mean being high in this group.
+
+- Extend the analysis of the statistics median and IQR to **each income status and continent combination**. Play around with displaying the resulting table. Use `pivot_longer()` and/or `pivot_wider()` to generate different outputs. Discuss the results as well as the readability of the different tables.
+
+```{r}
+stat_table <- df_vars %>%
+  filter(!is.na(income_status) & !is.na(region)) %>%
+  group_by(region, income_status) %>%
+  summarise(across(c(education_expenditure, youth_unemployment_rate, net_migration_rate),
+                   list(median = ~median(.x, na.rm = TRUE), 
+                        iqr = ~IQR(.x, na.rm = TRUE))))
+head(stat_table)
+
+long_table <- stat_table %>%
+  pivot_longer(-c(region, income_status), values_to = "value", names_to = "metric")
+head(long_table)
+
+wide_table <- long_table %>%
+  pivot_wider( names_from = "income_status", values_from = "value")
+head(wide_table)
+```
+
+**Conclusion:**
+
+The standard summarise output is a wide table with many columns which could be difficult to read. We transform it first to a long format, which is less intuitive for humans to read but more suitable for further analysis and plotting. Lastly we transform it to another wide table, which is much easier to read for comparative analysis.
+
+- Identify countries performing well in terms of both **youth unemployment** and **net migration rate** (top 25% in net migration and bottom 25% in youth unemployment within their continent).
+
+```{r}
+df_vars %>%
+  group_by(region) %>%
+  filter(net_migration_rate >= quantile(net_migration_rate, 0.75, na.rm = TRUE) &
+         youth_unemployment_rate <= quantile(youth_unemployment_rate, 0.25, na.rm = TRUE)) %>%
+  select(region, country, youth_unemployment_rate, 
+         net_migration_rate) %>%
+  arrange(region, youth_unemployment_rate)
+```
+
+## g. Conditional Probabilities
+
+Estimate the following based on the observed frequencies in the data:
+
+- What is the (posterior or conditional) probability that a European country belongs to the high income group? What is the prior probability that a country belongs to the high income group?
+
+```{r}
+df_vars %>%
+  filter(region == "Europe", !is.na(income_status)) %>%
+  summarise(
+    Pct_European_High_Income =
+      100 * mean(income_status == "High-income countries")
+  )
+df_vars %>%
+  filter(!is.na(income_status)) %>%
+  summarise(
+    Pct_Global_High_Income =
+      100 * mean(income_status == "High-income countries")
+  )
+
+```
+
+**Conclusion:**
+
+We can observe that the conditional probability is more than double the unconditional. This is unsurprising as many of the worlds highest income countries are located in Europe.
+
+- Given a country has high youth unemployment (above %25), what is the probability that it also has negative net migration?
+
+```{r}
+# Probability of a country having negative net migration given it has high youth unemployment
+df_vars %>%
+  filter(youth_unemployment_rate > 25) %>%
+  summarise(
+    Pct_Negative_Net_Migration =
+      100 * mean(net_migration_rate < 0, na.rm = TRUE)
+  )
+```
+
+**Conclusion:**
+
+The conditional probability is around 61%.
+
+## h. Simpson’s Paradox Analysis
+
+Investigate whether an overall trend in youth unemployment rate in the high and low income groups reverses when analyzed at the continent level. E.g., does the youth unemployment rate appear lower in low-income countries overall, but higher when controlling for continent? Explain the results and possible reasons behind this paradox.
+
+```{r}
+# Overall trend for income groups
+df_vars %>%
+ drop_na(income_status) %>%
+  group_by(income_status) %>%
+    summarise(mean_youth_unemployment_rate = mean(youth_unemployment_rate,
+                                                  na.rm=TRUE))
+
+# Trend for different continents
+df_vars %>%
+  drop_na(income_status) %>%
+   pivot_wider(names_from = region, values_from = youth_unemployment_rate, 
+               names_prefix = "Youth_UNEMP_") %>%
+    group_by(income_status) %>%
+      summarise(North_America = mean(`Youth_UNEMP_North America`,na.rm=TRUE),
+                Oceania       = mean(Youth_UNEMP_Oceania,na.rm=TRUE),
+                Europe        = mean(Youth_UNEMP_Europe,na.rm=TRUE),
+                Africa        = mean(Youth_UNEMP_Africa,na.rm=TRUE),
+                South_America = mean(`Youth_UNEMP_South America`,na.rm=TRUE),
+                Asia          = mean(Youth_UNEMP_Asia,na.rm=TRUE)) %>%
+       kbl(caption = "Average Youth Unemployment per income group and continent") %>%
+        kable_styling()
+    
+```
+
+**Conclusion:**
+
+The overall trend is that low-income countries have lower youth unemployment rates and especially upper-middle-income countries have a very high youth unemployment rate.
+
+This general trend largely holds for the individual continents except for Asia and Africa. In Asia the low-income countries have the highest youth unemployment rate, this is however offset in the aggregate by African low-income countries which outnumber the Asian ones by a landslide. In Africa high-income countries have the lowest youth unemployment rate, however in the aggregate this is also offset because Africa has very little high-income countries.
+
+Proof of the argument above:
+
+```{r}
+df_vars %>%
+  drop_na(income_status) %>%
+   filter(region %in% c("Africa","Asia")) %>%
+    group_by(region) %>%
+     count(income_status)
+```
+
+## i. Data Export
+
+Export the final tidy dataset from e. as a **CSV** with:`;` as a separator; `.` representing missing values; no row names included. Upload the `.csv` to TUWEL, together with the submission.
+
+```{r}
+write.csv2(df_vars, file = "assignment2_final_data.csv", row.names = FALSE, na = ".")
+```
