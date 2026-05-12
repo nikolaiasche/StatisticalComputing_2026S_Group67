@@ -1,6 +1,6 @@
 ---
 title: "Case Study 3"
-author: "First Name, Last Name"
+author: "Oliver Crasnianec, Lorenz Kovsca, Nikolai Asche"
 date: "2026-05-06"
 output: pdf_document
 editor_options: 
@@ -100,6 +100,15 @@ ggplot(data, aes(x = expenditure, fill = income_status)) +
 
 **Conclusion:**
 
+By inspecting the plot, we can see, that the education expenditure (% of
+GDP) strongly overlaps across all 4 income status groups e.g. across H,
+UM, LM and L. Most countries seem to spend roughly between 3% and 6% of
+GDP on education, so there seems not to be a clear separation between
+the income levels. Higher income countries seem to concentrate more
+around 5% of GDP, meanwhile lower income countries seem to gravitate
+more towards lower education expenditure (% of GDP). Overall, the
+differences between the income groups are not very pronounced.
+
 ## b. Income status in different continents
 
 Investigate how the income status is distributed in the different
@@ -120,6 +129,13 @@ ggplot(data, aes(x = continent, fill = income_status)) + geom_bar() +
 
 **Conclusion:**
 
+The absolute frequency stacked barplots show that the number of entities
+differs strongly across continents. Africa and Asia contain many lower-
+and lower-middle income entities, while Europe seems to have the most
+high income entities. Asia and the Americas have a more mixed income
+distribution. Further Oceania seems to have fewer observations overall,
+as it's stacked barplot is compared to the others rather small.
+
 - Create another stacked barplot of relative frequencies (height of the
   bars should be one). Comment the plot.
 
@@ -134,6 +150,14 @@ ggplot(data, aes(x = continent, fill = income_status)) + geom_bar(position = "fi
 ```
 
 **Conclusion:**
+
+The stacked barplot of relative frequency makes the compositions of
+incomes across continents easier to compare, as Oceania is now easier to
+compare to the others. Europe has the largest proportion of high income
+entities, while Africa has the largest proportion of low- and
+lower-middle income entities. Asia and the Americas seem to be more
+mixed. Oceania mainly consists of lower-middle, upper-middle and
+high-income entities with no low-income entities.
 
 - Create a mosaic plot of continents and income status using base R
   functions.
@@ -172,16 +196,63 @@ legend(
 
 **Conclusion:**
 
+By using a mosaic plot, we obtain a useful visual representation and
+overview of the income status of each continent and it is possible to
+recognize relationships between different variables. The width shows the
+number of observations per continent and the height of each colored part
+shows the income distribution within each continent.
+
 - Briefly comment on the differences between the three plots generated
   to investigate the income distribution among the different continents.
 
 **Conclusion:**
+
+The absolute frequency stacked barplot is useful for comparing the total
+number in each continent, but in turn makes it harder to compare
+proportions as in the case of Oceania having a lower number of
+observations compared to the other continents. By using the relative
+frequency stacked barplot it is possible to remove the effect the number
+of observations of each continent have on size of each bar and therefore
+making income composition more clearly visible. Lastly the mosaic plot
+combines both features as mentioned before the width shows the number of
+observations, while the height of each colored part shows the income
+distribution within each continent.
 
 ## c. Income status in different subcontinents
 
 For Oceania, investigate further how the income status distribution is
 in the different subcontinents. Use one of the plots in b. for this
 purpose. Comment on the results.
+
+```{r}
+oceania_data <- data %>%
+  filter(continent == "Oceania") %>%
+  mutate(subcontinent = fct_drop(subcontinent))
+
+ggplot(oceania_data, aes(x = subcontinent, fill = income_status)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = "Subcontinents Oceania",
+    y = "Relative frequency",
+    fill = "Income status"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+**Conclusion:**
+
+I used the relative frequency stacked barblot from subtask b. for
+further investigation, due to the subcontinents of Oceania having rather
+different numbers of observation. By doing that it is easier to compare
+proportions of income status between the subcontinents. We can see, that
+Australia and New Zealand only consist of high-income entities.
+Melanesia has the highest proportion of lower-middle-income entities,
+meanwhile Polynesia has the highest proportion of upper-middle income
+entities. Micronesia also seems to be more mixed but still with a high
+proportion of high-income entities. Also there are no low-income
+entities shown for Oceania in the data set.
 
 ## d. Net migration in different continents
 
@@ -195,6 +266,7 @@ purpose. Comment on the results.
   outlier.
 
 - Comment on the plot.
+
 ```{r}
 # find largest and smallest outliers in Asia
 outliers_df <- data %>% filter(continent == "Asia") %>% 
@@ -213,9 +285,13 @@ ggplot(data, aes(x = continent, y = net_migr_rate, fill = continent)) +
   labs(title = "Boxplots of net migration rates",
        xlab = "Continent", ylab = "net migration rate")
 ```
+
 **Conclusion:**
 
-The largest positive outlier in Asia is Syria, the smallest Lebanon. Apart from Oceania all continents have distributions with median roughly at 0. Except for the extreme cases outliers roughly lie within +/- 15 of the median.
+The largest positive outlier in Asia is Syria, the smallest Lebanon.
+Apart from Oceania all continents have distributions with median roughly
+at 0. Except for the extreme cases outliers roughly lie within +/- 15 of
+the median.
 
 ## e. Net migration in different subcontinents
 
@@ -240,9 +316,14 @@ ggplot(data, aes(x = subcontinent, y = net_migr_rate, fill = continent)) +
   theme(legend.position = "none",
         axis.text.x = element_text(vjust = 1, hjust = 1, angle = 40))
 ```
+
 **Conclusion:**
 
-Under the assumption that migration mostly happens among geographical neighbors, we can now for example see a migration pattern from Latin America and the Caribbean to Northern America, although the continents total migration is roughly centered. Also Australia and New Zealand is the only subcontinent with a positive net migration in Oceania.
+Under the assumption that migration mostly happens among geographical
+neighbors, we can now for example see a migration pattern from Latin
+America and the Caribbean to Northern America, although the continents
+total migration is roughly centered. Also Australia and New Zealand is
+the only subcontinent with a positive net migration in Oceania.
 
 ## f. Median net migration rate per subcontinent.
 
