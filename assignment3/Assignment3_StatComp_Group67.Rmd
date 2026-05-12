@@ -195,6 +195,27 @@ purpose. Comment on the results.
   outlier.
 
 - Comment on the plot.
+```{r}
+# find largest and smallest outliers in Asia
+outliers_df <- data %>% filter(continent == "Asia") %>% 
+                summarise(max_out = country[which.max(net_migr_rate)],
+                          max_val = net_migr_rate[which.max(net_migr_rate)],
+                          min_out = country[which.min(net_migr_rate)],
+                          min_val = net_migr_rate[which.min(net_migr_rate)])
+
+ggplot(data, aes(x = continent, y = net_migr_rate, fill = continent)) +
+  geom_boxplot() +
+  # annotate outliers in the Boxplot directly
+  annotate("text", x = "Asia", y = outliers_df$max_val, 
+           label = paste("          ",outliers_df$max_out)) +
+  annotate("text", x = "Asia", y = outliers_df$min_val, 
+           label = paste("                ",outliers_df$min_out)) +
+  labs(title = "Boxplots of net migration rates",
+       xlab = "Continent", ylab = "net migration rate")
+```
+**Conclusion:**
+
+The largest positive outlier in Asia is Syria, the smallest Lebanon. Apart from Oceania all continents have distributions with median roughly at 0. Except for the extreme cases outliers roughly lie within +/- 15 of the median.
 
 ## e. Net migration in different subcontinents
 
@@ -209,6 +230,19 @@ lot of migration flows happen within the continent.
 - Remember to prettify the plot (rotate axis labels if needed).
 
 - Describe what you see.
+
+```{r}
+ggplot(data, aes(x = subcontinent, y = net_migr_rate, fill = continent)) +
+  geom_boxplot() +
+  facet_grid(cols = vars(continent), scales = "free_x", space = "free_x") +
+  labs(title = "Boxplots of net migration rates") +
+  ylab("net migration rate") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(vjust = 1, hjust = 1, angle = 40))
+```
+**Conclusion:**
+
+Under the assumption that migration mostly happens among geographical neighbors, we can now for example see a migration pattern from Latin America and the Caribbean to Northern America, although the continents total migration is roughly centered. Also Australia and New Zealand is the only subcontinent with a positive net migration in Oceania.
 
 ## f. Median net migration rate per subcontinent.
 
@@ -235,6 +269,18 @@ median net migration rate on the x-axis.
 
 - Comment on the plot. E.g., what are the regions with the most influx?
   What are the regions with the most outflux?
+
+```{r}
+data %>% group_by(subcontinent, continent) %>% 
+  summarise(median_net_migr_rate = median(net_migr_rate, na.rm = TRUE),.groups = "drop") %>%
+  mutate(subcontinent = fct_reorder(subcontinent, median_net_migr_rate)) %>%
+ggplot(aes(x = median_net_migr_rate, y = subcontinent, color = continent)) +
+  geom_point() +
+  labs(title = "Median net migration rate per subcontinent") +
+  xlab("median net migration rate")
+
+# ADD COLOR FRIENDLY COLORS FOR CONTINENT
+```
 
 ## g. Median youth unemployment rate per subcontinent
 
