@@ -421,6 +421,22 @@ or the interquartile range of the variable in each of the subcontinents.
 Repeat the plot from Task g. but include also error bars which reflect
 the 25% and 75% quantiles. You can use `geom_errorbar` in **ggplot2**.
 
+```{r}
+data %>% group_by(subcontinent, continent) %>% 
+  summarise(median_youth_unempl_rate = median(youth_unempl_rate, na.rm = TRUE),
+            Q1 = quantile(youth_unempl_rate, 0.25, na.rm = TRUE),
+            Q3 = quantile(youth_unempl_rate, 0.75, na.rm = TRUE), .groups = "drop") %>%
+  mutate(subcontinent = fct_reorder(subcontinent, median_youth_unempl_rate)) %>%
+ggplot(aes(x = median_youth_unempl_rate, y = subcontinent, fill = continent)) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  geom_errorbar(aes(xmin= Q1, xmax = Q3), width = 0.5) +
+  labs(title = "Median youth unemployment rate per subcontinent") +
+  xlab("median youth unemployment rate") +
+  theme_bw() +
+  scale_color_viridis_d() # use viridis palette for color-blind suitability
+
+```
+
 ## i. Relationship between education expenditure and net migration rate
 
 Using **ggplot2**, create a plot showing the relationship between
@@ -450,6 +466,26 @@ countries of the world together with ISO codes.
 
 - Inspect the data and check whether the join worked well.
 
+First we import the dataset and convert it to a tidy format:
+```{r}
+population_data <- read_excel("population_data.xls")
+
+population_data_20 <- population_data %>%
+                       pivot_longer(5:70, names_to = "year", values_to = "population") %>%
+                        filter(year == 2020) %>%
+                         select(ISO3    = `Country Code`,
+                                population2020 = population)
+
+glimpse(population_data_20)
+```
+Next we perform the left join with our current data:
+```{r}
+data <- left_join(data, population_data_20, by = "ISO3")
+
+glimpse(data)
+```
+We have successfully added the population2020 column for all columns that were already present in our data.
+
 ## l. Scatterplot of education expenditure and net migration rate in Europe
 
 Make a scatterplot of education expenditure and net migration rate for
@@ -462,6 +498,19 @@ the countries of Europe.
 - Remove the legend.
 
 - Comment on the plot.
+
+```{r}
+data %>% filter(continent == "Europe" & !is.na(expenditure) ) %>%
+          ggplot(aes(x = net_migr_rate, y = expenditure, size = population2020)) +
+          geom_point(alpha = 0.7, color = "darkblue") +
+          labs(title = "Net migration vs. education expenditure in Europe",
+               x = "Net migration rate",
+               y = "Education expenditure") +
+          guides(size = "none") # remove the legend for size
+```
+**Conclusion:**
+
+One visible trend is that net migration rate increases with education expenditure. All the countries with the most education spending lie in the positive midfield of net migration rate. The most populated countries in Europe all seem to have a population expenditure between 4 and 6. 
 
 ## m. Interactive plot
 
