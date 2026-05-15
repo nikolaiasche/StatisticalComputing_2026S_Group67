@@ -356,12 +356,15 @@ data %>% group_by(subcontinent, continent) %>%
   summarise(median_net_migr_rate = median(net_migr_rate, na.rm = TRUE),.groups = "drop") %>%
   mutate(subcontinent = fct_reorder(subcontinent, median_net_migr_rate)) %>%
 ggplot(aes(x = median_net_migr_rate, y = subcontinent, color = continent)) +
-  geom_point() +
+  geom_point(size = 2.5) +
   labs(title = "Median net migration rate per subcontinent") +
-  xlab("median net migration rate")
+  xlab("median net migration rate") +
+  scale_color_viridis_d() # use viridis palette for color-blind suitability
 
-# ADD COLOR FRIENDLY COLORS FOR CONTINENT
 ```
+**Conclusion:**
+
+Australia and New Zealand, Western Europe, Northern Europe and Northern America have the highest median influx, while Micronesia and Polynesia the highest median outflux.
 
 ## g. Median youth unemployment rate per subcontinent
 
@@ -388,6 +391,24 @@ median unemployment rate on the x-axis.
 
 - Comment on the plot. E.g., what are the regions with the highest vs
   lowest youth unemployment rate?
+
+```{r}
+data %>% group_by(subcontinent, continent) %>% 
+  summarise(median_youth_unempl_rate = median(youth_unempl_rate, na.rm = TRUE),.groups = "drop") %>%
+  mutate(subcontinent = fct_reorder(subcontinent, median_youth_unempl_rate)) %>%
+ggplot(aes(x = median_youth_unempl_rate, y = subcontinent, fill = continent)) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  labs(title = "Median youth unemployment rate per subcontinent") +
+  xlab("median youth unemployment rate") +
+  theme_bw() +
+  scale_color_viridis_d() # use viridis palette for color-blind suitability
+
+```
+**Conclusion:**
+
+The *stat = "identity"* argument in *geom_bar()* makes it behave like geom_col(), where instead of counting the number of categories in the categorical variable, it takes a second numeric variable, which it maps onto the bars length.
+
+While Central, Eastern and South-eastern Asia have very low median youth unemployment rates, Northern Africa and Polynesia have the largest median youth unemployment rates.
 
 ## h. Median youth unemployment rate per subcontinent -- with error bars
 
