@@ -450,6 +450,19 @@ education expenditure and net migration rate.
 Comment on the plot. Do you see any relationship between the two
 variables? Do you see any difference among the income levels?
 
+```{r}
+ggplot(data, aes(x = expenditure, y = net_migr_rate, color = income_status)) +
+  geom_jitter(alpha = 0.6) +
+  ylim(-20,20) +
+  geom_smooth(method = "lm", se = FALSE, fullrange = TRUE, alpha =0.6, linewidth = 0.4) +
+  labs(title = "Relationship between education expenditure and net migration rate",
+       x = "Education expenditure (% of GDP)",
+       y = "Net migration rate") +
+  theme_bw() 
+```
+We set the y limits to -20 and 20 to make the plot more readable (Lebanon and Syria are extreme outliers as previously seen in the boxplots). There seems to be a slight downtrend in net migration as education expenditure increases, most noticably for high-income countries. However, the relationship is not very strong and there is a lot of variability in net migration rate across all levels of education expenditure. The regression lines for the different income levels are relatively close to each other, suggesting that the relationship between education expenditure and net migration rate does not differ substantially among the income levels.
+
+
 ## j. Relationship between youth unemployment and net migration rate
 
 Create a plot as in Task i. but for youth unemployment and net migration
