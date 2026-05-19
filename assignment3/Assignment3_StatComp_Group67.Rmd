@@ -457,7 +457,8 @@ ggplot(data, aes(x = expenditure, y = net_migr_rate, color = income_status)) +
   geom_smooth(method = "lm", se = FALSE, fullrange = TRUE, alpha =0.6, linewidth = 0.4) +
   labs(title = "Relationship between education expenditure and net migration rate",
        x = "Education expenditure (% of GDP)",
-       y = "Net migration rate") +
+       y = "Net migration rate",
+       Color = "Income Status") +
   theme_bw() 
 ```
 We set the y limits to -20 and 20 to make the plot more readable (Lebanon and Syria are extreme outliers as previously seen in the boxplots). There seems to be a slight downtrend in net migration as education expenditure increases, most noticably for high-income countries. However, the relationship is not very strong and there is a lot of variability in net migration rate across all levels of education expenditure. The regression lines for the different income levels are relatively close to each other, suggesting that the relationship between education expenditure and net migration rate does not differ substantially among the income levels.
@@ -467,6 +468,20 @@ We set the y limits to -20 and 20 to make the plot more readable (Lebanon and Sy
 
 Create a plot as in Task i. but for youth unemployment and net migration
 rate. Comment briefly.
+
+```{r}
+ggplot(data, aes(x = youth_unempl_rate, y = net_migr_rate, color = income_status)) +
+  geom_jitter(alpha = 0.6) +
+  ylim(-20,20) +
+  geom_smooth(method = "lm", se = FALSE, fullrange = TRUE, alpha =0.6, linewidth = 0.4) +
+  labs(title = "Relationship between youth unemployment and net migration rate",
+       x = "Youth Unemployment Rate",
+       y = "Net migration rate",
+       color = "Income Status") +
+  theme_bw() 
+```
+The effect is similar to the one of education expenditure, we can see a slight downtrend in net migration as youth unemployment increases, most noticeably for high and lower-middle income countries. There is no significant variation in the relationship between youth unemployment and net migration across the different income levels, as the regression lines are relatively close to each other.
+
 
 ## k. Merging population data
 
@@ -481,6 +496,7 @@ countries of the world together with ISO codes.
 
 First we import the dataset and convert it to a tidy format:
 ```{r}
+library(readxl)
 population_data <- read_excel("population_data.xls")
 
 population_data_20 <- population_data %>%
@@ -514,11 +530,11 @@ the countries of Europe.
 
 ```{r}
 data %>% filter(continent == "Europe" & !is.na(expenditure) ) %>%
-          ggplot(aes(x = net_migr_rate, y = expenditure, size = population2020)) +
+          ggplot(aes(x = expenditure, y = net_migr_rate, size = population2020)) +
           geom_point(alpha = 0.7, color = "darkblue") +
           labs(title = "Net migration vs. education expenditure in Europe",
-               x = "Net migration rate",
-               y = "Education expenditure") +
+               y = "Net migration rate",
+               x = "Education expenditure") +
           guides(size = "none") # remove the legend for size
 ```
 **Conclusion:**
@@ -543,6 +559,20 @@ can wrap interactive plots in a conditional check or set the chunk
 option `eval=FALSE`. Alternatively, you can use the **webshot** package
 to automatically convert interactive elements into static images during
 the knit process.
+
+```{r}
+library(plotly)
+ plot_m <- ggplot(data, aes(y = net_migr_rate, x = expenditure, size = population2020, 
+                  color = continent)) +
+          geom_point(alpha = 0.7) +
+          labs(title = "Net migration vs. education expenditure in the World",
+               x = "Net migration rate",
+               y = "Education expenditure") +
+          guides(size = "none")
+ggplotly(plot_m
+        , tooltip = c("text", "x", "y", "size")) 
+```
+For analysis purposus we did not remove the outliers as in task i. We can now clearly and quickly see which countries produce interesting results.
 
 ## n. Parallel coordinate plot
 
