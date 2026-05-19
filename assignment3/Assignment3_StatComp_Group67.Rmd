@@ -569,8 +569,7 @@ library(plotly)
                x = "Net migration rate",
                y = "Education expenditure") +
           guides(size = "none")
-ggplotly(plot_m
-        , tooltip = c("text", "x", "y", "size")) 
+ggplotly(plot_m, tooltip = c("text", "x", "y", "size")) 
 ```
 For analysis purposus we did not remove the outliers as in task i. We can now clearly and quickly see which countries produce interesting results.
 
@@ -586,6 +585,14 @@ create such a plot where you look at the three main variables in the
 data set: education expenditure, youth unemployment rate and net
 migration rate. Color the lines based on the income status. Briefly
 comment.
+
+```{r}
+library(GGally)
+
+ggparcoord(data, columns = 7:9, groupColumn = 6, alphaLines = 0.6, showPoints = TRUE, scale  = "std")   +
+  theme_bw() 
+```
+
 
 ## o. World map visualisation
 
