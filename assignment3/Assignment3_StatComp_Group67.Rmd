@@ -560,7 +560,7 @@ option `eval=FALSE`. Alternatively, you can use the **webshot** package
 to automatically convert interactive elements into static images during
 the knit process.
 
-```{r}
+```{r, eval = FALSE}
 library(plotly)
  plot_m <- ggplot(data, aes(y = net_migr_rate, x = expenditure, size = population2020, 
                   color = continent)) +
@@ -589,9 +589,10 @@ comment.
 ```{r}
 library(GGally)
 
-ggparcoord(data, columns = 7:9, groupColumn = 6, alphaLines = 0.6, showPoints = TRUE, scale  = "std")   +
+ggparcoord(data, columns = c(8,9,7), groupColumn = 6, alphaLines = 0.6, showPoints = TRUE, scale  = "std")   +
   theme_bw() 
 ```
+In a parallel coordinates plot, each observation is represented by a single line connecting all the measured values. We standardized the values for better comparison across collumns. Parallel lines indicate positive correlation between observations (e.g. countries in our case), while lines crossing in a "X" shape indicate negative correlation. Most noticably, there is a visble clustering of high income countries with high education expenditure, low youth unemployment and positive net migration. On the other hand, low income countries seem to cluster around low education expenditure, high youth unemployment and negative net migration. The middle income groups are more mixed but still show a tendency towards the same direction as the high and low income groups, respectivly.
 
 
 ## o. World map visualisation
@@ -601,3 +602,18 @@ the vignette
 <https://cran.r-project.org/web/packages/rworldmap/vignettes/rworldmap.pdf>
 to find how to do this in R. Alternatively, you can use other packages
 (such as **ggplot2**, **sf** and **rnaturalearthdata**) to create a map.
+
+```{r}
+library(rworldmap)
+
+sPDF <- joinCountryData2Map( data, joinCode = "ISO3", nameJoinColumn = "ISO3", verbose = TRUE)
+par(mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
+mapParams <- mapCountryData( sPDF, nameColumnToPlot="expenditure" , 
+                             mapTitle="Education expenditure (% of GDP) in 2020", 
+                             catMethod = "quantiles", colourPalette = "topo", addLegend = FALSE)
+
+do.call( addMapLegend, c(mapParams, legendWidth=0.5, legendLabels="all", 
+                         legendIntervals="page", legendMar = 2) )
+```
+
+We follow the guide in the vignete and plot a world map of education expenditure. In joining the data, only Gibraltar failed, which is no big problem!
