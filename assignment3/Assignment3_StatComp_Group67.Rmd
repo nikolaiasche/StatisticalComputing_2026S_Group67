@@ -460,6 +460,13 @@ ggplot(aes(x = median_youth_unempl_rate, y = subcontinent, fill = continent)) +
   scale_fill_viridis_d()
 ```
 
+**Conclusion:**
+
+The error bars show that the spread of youth unemployment differs
+strongly between subcontinents. Some regions, such as Sub-Saharan Africa
+and Polynesia, have relatively wide interquartile ranges, while others,
+such as Australia and New Zealand, show little variation.
+
 ## i. Relationship between education expenditure and net migration rate
 
 Using **ggplot2**, create a plot showing the relationship between
