@@ -18,6 +18,15 @@ file is not in a decent form.*
 We made no use of any AI tools in order to complete the sub tasks of
 Case Study 3.
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE
+)
+packages <- c("tidyverse", "forcats", "readxl", "plotly", "rworldmap", "GGally", "webshot", "knitr", "jsonlite")
+lapply(packages, library, character.only = TRUE)
+```
+
 # Data
 
 Load the data set you exported in the final Task of Case Study 2.
@@ -37,9 +46,6 @@ information on continent, subcontinent/region and income status was
 appended to the dataset in Case Study 2.
 
 ```{r}
-library(tidyverse)
-library(forcats)
-
 data_raw <- read_csv("file_out2.csv",
                      na = c(".", "NA", ""),
                      show_col_types = FALSE)
@@ -555,13 +561,20 @@ countries of the world together with ISO codes.
 First we import the dataset and convert it to a tidy format:
 
 ```{r}
-library(readxl)
-population_data <- read_excel("population_data.xls")
+population_url <- paste0(
+  "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL",
+  "?format=json&date=2020&per_page=20000"
+)
 
-population_data_20 <- population_data %>%
-  pivot_longer(5:70, names_to = "year", values_to = "population") %>%
-  filter(year == 2020) %>%
-  select(ISO3    = `Country Code`, population2020 = population)
+population_json <- jsonlite::fromJSON(population_url)
+
+population_data_20 <- as_tibble(population_json[[2]]) %>%
+  transmute(
+    ISO3 = countryiso3code,
+    population2020 = value
+  ) %>%
+  filter(!is.na(ISO3), ISO3 != "", !is.na(population2020)) %>%
+  distinct(ISO3, .keep_all = TRUE)
 
 glimpse(population_data_20)
 ```
@@ -600,9 +613,13 @@ the countries of Europe.
 
 ```{r}
 data %>% filter(continent == "Europe" & !is.na(expenditure)) %>%
-  ggplot(aes(x = expenditure, y = net_migr_rate, size = population2020)) +
-  geom_point(alpha = 0.7, color = "darkblue") +
-  labs(title = "Net migration vs. education expenditure in Europe", y = "Net migration rate", x = "Education expenditure") +
+  ggplot(aes(x = expenditure, y = net_migr_rate, 
+             size = population2020)) +
+  geom_point(alpha = 0.7, 
+             color = "darkblue") +
+  labs(title = "Net migration vs. education expenditure in Europe",
+       y = "Net migration rate", 
+       x = "Education expenditure") +
   guides(size = "none")
 ```
 
@@ -633,8 +650,7 @@ option `eval=FALSE`. Alternatively, you can use the **webshot** package
 to automatically convert interactive elements into static images during
 the knit process.
 
-```{r, eval = FALSE}
-library(plotly)
+```{r eval=FALSE}
 plot_m <- ggplot(
   data,
   aes(
@@ -644,11 +660,13 @@ plot_m <- ggplot(
     color = continent,
     text = country
   )
-) +
-  geom_point(alpha = 0.7) +
-  labs(title = "Net migration vs. education expenditure in the World", x = "Education expenditure", y = "Net migration rate", color = "Continent") +
-  guides(size = "none")
-ggplotly(plot_m, tooltip = c("text", "x", "y", "size")) 
+) + geom_point(alpha = 0.7) + labs(
+  title = "Net migration vs. education expenditure in the World",
+  x = "Education expenditure",
+  y = "Net migration rate",
+  color = "Continent"
+) + guides(size = "none") 
+ggplotly(plot_m, tooltip = c("text", "x", "y", "size"))
 ```
 
 **Conclusion:**
@@ -671,9 +689,14 @@ migration rate. Color the lines based on the income status. Briefly
 comment.
 
 ```{r}
-library(GGally)
-
-ggparcoord(data, columns = c(8,9,7), groupColumn = 6, alphaLines = 0.6, showPoints = TRUE, scale  = "std")   +
+ggparcoord(
+  data,
+  columns = c(8, 9, 7),
+  groupColumn = 6,
+  alphaLines = 0.6,
+  showPoints = TRUE,
+  scale  = "std"
+)   +
   theme_bw() 
 ```
 
@@ -701,16 +724,34 @@ to find how to do this in R. Alternatively, you can use other packages
 (such as **ggplot2**, **sf** and **rnaturalearthdata**) to create a map.
 
 ```{r}
-library(rworldmap)
+sPDF <- joinCountryData2Map(
+  data,
+  joinCode = "ISO3",
+  nameJoinColumn = "ISO3",
+  verbose = TRUE
+)
+par(mai = c(0, 0, 0.2, 0),
+    xaxs = "i",
+    yaxs = "i")
+mapParams <- mapCountryData(
+  sPDF,
+  nameColumnToPlot = "expenditure" ,
+  mapTitle = "Education expenditure (% of GDP) in 2020",
+  catMethod = "quantiles",
+  colourPalette = "topo",
+  addLegend = FALSE
+)
 
-sPDF <- joinCountryData2Map( data, joinCode = "ISO3", nameJoinColumn = "ISO3", verbose = TRUE)
-par(mai=c(0,0,0.2,0),xaxs="i",yaxs="i")
-mapParams <- mapCountryData( sPDF, nameColumnToPlot="expenditure" , 
-                             mapTitle="Education expenditure (% of GDP) in 2020", 
-                             catMethod = "quantiles", colourPalette = "topo", addLegend = FALSE)
-
-do.call( addMapLegend, c(mapParams, legendWidth=0.5, legendLabels="all", 
-                         legendIntervals="page", legendMar = 2) )
+do.call(
+  addMapLegend,
+  c(
+    mapParams,
+    legendWidth = 0.5,
+    legendLabels = "all",
+    legendIntervals = "page",
+    legendMar = 2
+  )
+)
 ```
 
 **Conclusion:**
