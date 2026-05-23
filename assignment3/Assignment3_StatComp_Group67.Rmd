@@ -13,6 +13,11 @@ deadline. Refrain from using explanatory comments in the R code chunks
 but write them as text instead. Points will be deducted if the submitted
 file is not in a decent form.*
 
+# Declaration of AI usage
+
+We made no use of any AI tools in order to complete the sub tasks of
+Case Study 3.
+
 # Data
 
 Load the data set you exported in the final Task of Case Study 2.
