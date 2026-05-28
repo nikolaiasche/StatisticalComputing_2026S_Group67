@@ -1,0 +1,768 @@
+---
+title: "Case Study 3"
+author: "Oliver Crasnianec, Lorenz Kovsca, Nikolai Asche"
+date: "2026-05-06"
+output: pdf_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+*The .Rmd* **and** *.html (or .pdf) should be uploaded in TUWEL by the
+deadline. Refrain from using explanatory comments in the R code chunks
+but write them as text instead. Points will be deducted if the submitted
+file is not in a decent form.*
+
+# Declaration of AI usage
+
+We made no use of any AI tools in order to complete the sub tasks of
+Case Study 3.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE
+)
+packages <- c("tidyverse", "forcats", "readxl", "plotly", "rworldmap", "GGally", "webshot", "knitr", "jsonlite")
+lapply(packages, library, character.only = TRUE)
+```
+
+# Data
+
+Load the data set you exported in the final Task of Case Study 2.
+Eliminate all observations with missing values in the income status
+variable.
+
+As a reminder, the data set includes world data from 2020, focusing on:
+
+- **Education Expenditure (% of GDP)**
+- **Youth Unemployment Rate (15-24 years)**
+- **Net Migration Rate** (difference between the number of people
+  entering and leaving a country per 1,000 persons)
+
+for most world entities in 2020. The data was downloaded from
+<https://www.cia.gov/the-world-factbook/about/archives/>. Additional
+information on continent, subcontinent/region and income status was
+appended to the dataset in Case Study 2.
+
+```{r}
+data_raw <- read_csv("file_out2.csv",
+                     na = c(".", "NA", ""),
+                     show_col_types = FALSE)
+
+data <- data_raw %>%
+  rename(income_status = status) %>%
+  filter(!is.na(income_status)) %>%
+  mutate(
+    income_status = factor(income_status, levels = c("H", "UM", "LM", "L")),
+    continent = factor(continent),
+    subcontinent = factor(subcontinent)
+  )
+
+glimpse(data)
+
+table(data$income_status)
+```
+
+**Conclusion:**
+
+We used the provided file "file_out2.csv" provided in the TUWEL section
+of Assignment 3 and renamed status to income_status
+
+# Tasks:
+
+## a. Education expenditure in different income levels
+
+Using **ggplot2**, create a density plot of the education expenditure
+grouped by income status. The densities for the different groups are
+superimposed in the same plot rather than in different plots. Ensure
+that you order the levels of the income status such that in the plots
+the legend is ordered from High (H) to Low (L).
+
+- The color of the density lines is black.
+
+- The area under the density curve should be colored differently among
+  the income status levels.
+
+- For the colors, choose a transparency level of 0.5 for better
+  visibility.
+
+- Position the legend at the top center of the plot and give it no title
+  (hint: use `element_blank()`).
+
+- Rename the x axis as "Education expenditure (% of GDP)"
+
+Comment briefly on the plot.
+
+```{r}
+ggplot(data, aes(x = expenditure, fill = income_status)) +
+  geom_density(color = "black",
+               alpha = 0.5,
+               na.rm = TRUE) +
+  labs(x = "Education expenditure (% of GDP)", y = "Density", ) +
+  theme_minimal() +
+  theme(legend.position = "top", legend.title = element_blank())
+```
+
+**Conclusion:**
+
+By inspecting the plot, we can see, that the education expenditure (% of
+GDP) strongly overlaps across all 4 income status groups e.g. across H,
+UM, LM and L. Most countries seem to spend roughly between 3% and 6% of
+GDP on education, so there seems not to be a clear separation between
+the income levels. Higher income countries seem to concentrate more
+around 5% of GDP, meanwhile lower income countries seem to gravitate
+more towards lower education expenditure (% of GDP). Overall, the
+differences between the income groups are not very pronounced.
+
+## b. Income status in different continents
+
+Investigate how the income status is distributed in the different
+continents.
+
+- Using **ggplot2**, create a stacked barplot of absolute frequencies
+  showing how the entities are split into continents and income status.
+  Comment the plot.
+
+```{r}
+ggplot(data, aes(x = continent, fill = income_status)) + geom_bar() +
+  labs(x = "Continents", y = "Absolute frequency", fill = "Income status") +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+**Conclusion:**
+
+The absolute frequency stacked barplots show that the number of entities
+differs strongly across continents. Africa and Asia contain many lower-
+and lower-middle income entities, while Europe seems to have the most
+high income entities. Asia and the Americas have a more mixed income
+distribution. Further Oceania seems to have fewer observations overall,
+as it's stacked barplot is compared to the others rather small.
+
+- Create another stacked barplot of relative frequencies (height of the
+  bars should be one). Comment the plot.
+
+```{r}
+ggplot(data, aes(x = continent, fill = income_status)) + geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Continents", y = "Relative frequency", fill = "Income status") +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+**Conclusion:**
+
+The stacked barplot of relative frequency makes the compositions of
+incomes across continents easier to compare, as Oceania is now easier to
+compare to the others. Europe has the largest proportion of high income
+entities, while Africa has the largest proportion of low- and
+lower-middle income entities. Asia and the Americas seem to be more
+mixed. Oceania mainly consists of lower-middle, upper-middle and
+high-income entities with no low-income entities.
+
+- Create a mosaic plot of continents and income status using base R
+  functions.
+
+```{r}
+income_continents <- table(data$continent, data$income_status)
+income_status_colors <- c(
+  "H" = "#f8766d",
+  "UM" = "#7cae00",
+  "LM" = "#00bfc4",
+  "L" = "#c77cff"
+)
+par(mar = c(5, 4, 4, 8), xpd = TRUE)
+
+mosaicplot(
+  income_continents,
+  color = income_status_colors,
+  main = "Income status by continent",
+  xlab = "Continent",
+  ylab = "Income status"
+)
+
+legend(
+  "topright",
+  inset = c(-0.25, 0),
+  legend = names(income_status_colors),
+  fill = income_status_colors,
+  title = "Income status",
+  bty = "n",
+  cex = 0.8
+)
+```
+
+**Conclusion:**
+
+By using a mosaic plot, we obtain a useful visual representation and
+overview of the income status of each continent and it is possible to
+recognize relationships between different variables. The width shows the
+number of observations per continent and the height of each colored part
+shows the income distribution within each continent.
+
+- Briefly comment on the differences between the three plots generated
+  to investigate the income distribution among the different continents.
+
+**Conclusion:**
+
+The absolute frequency stacked barplot is useful for comparing the total
+number in each continent, but in turn makes it harder to compare
+proportions as in the case of Oceania having a lower number of
+observations compared to the other continents. By using the relative
+frequency stacked barplot it is possible to remove the effect the number
+of observations of each continent have on size of each bar and therefore
+making income composition more clearly visible. Lastly the mosaic plot
+combines both features as mentioned before the width shows the number of
+observations, while the height of each colored part shows the income
+distribution within each continent.
+
+## c. Income status in different subcontinents
+
+For Oceania, investigate further how the income status distribution is
+in the different subcontinents. Use one of the plots in b. for this
+purpose. Comment on the results.
+
+```{r}
+oceania_data <- data %>%
+  filter(continent == "Oceania") %>%
+  mutate(subcontinent = fct_drop(subcontinent))
+
+ggplot(oceania_data, aes(x = subcontinent, fill = income_status)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Subcontinents Oceania", y = "Relative frequency", fill = "Income status") +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+**Conclusion:**
+
+I used the relative frequency stacked barblot from subtask b. for
+further investigation, due to the subcontinents of Oceania having rather
+different numbers of observation. By doing that it is easier to compare
+proportions of income status between the subcontinents. We can see, that
+Australia and New Zealand only consist of high-income entities.
+Melanesia has the highest proportion of lower-middle-income entities,
+meanwhile Polynesia has the highest proportion of upper-middle income
+entities. Micronesia also seems to be more mixed but still with a high
+proportion of high-income entities. Also there are no low-income
+entities shown for Oceania in the data set.
+
+## d. Net migration in different continents
+
+- Using **ggplot2**, create parallel boxplots showing the distribution
+  of the net migration rate in the different continents.
+
+- Prettify the plot (change y-, x-axis labels, etc).
+
+- Identify which country in Asia constitutes the largest negative
+  outlier and which country in Asia constitutes the largest positive
+  outlier.
+
+- Comment on the plot.
+
+```{r fig.height=5, fig.width=8}
+outliers_df <- data %>% filter(continent == "Asia") %>%
+  summarise(
+    max_out = country[which.max(net_migr_rate)],
+    max_val = net_migr_rate[which.max(net_migr_rate)],
+    min_out = country[which.min(net_migr_rate)],
+    min_val = net_migr_rate[which.min(net_migr_rate)]
+  )
+
+ggplot(data, aes(x = continent, y = net_migr_rate, fill = continent)) +
+  geom_boxplot() +
+  annotate(
+    "text",
+    x = "Asia",
+    y = outliers_df$max_val,
+    label = outliers_df$max_out, vjust = -0.5) +
+  annotate(
+    "text",
+    x = "Asia",
+    y = outliers_df$min_val,
+    label = outliers_df$min_out, vjust = 1.5) +
+  labs(title = "Boxplots of net migration rates",
+       x = "Continent",
+       y = "Net migration rate",
+       fill = "Continent")
+```
+
+**Conclusion:**
+
+The largest positive outlier in Asia is Syria, the smallest Lebanon.
+Apart from Oceania all continents have distributions with median roughly
+at 0. Except for the extreme cases outliers roughly lie within +/- 15 of
+the median. By using annotate we are able to annotate the outliers
+directly.
+
+## e. Net migration in different subcontinents
+
+The graph in d. clearly does not convey the whole picture. It would be
+interesting also to look at the subcontinents, as it is likely that a
+lot of migration flows happen within the continent.
+
+- Investigate the net migration in different subcontinents using again
+  parallel boxplots. Group the boxplots by continent (hint: use
+  `facet_grid` with `scales = "free_x"`).
+
+- Remember to prettify the plot (rotate axis labels if needed).
+
+- Describe what you see.
+
+```{r}
+ggplot(data, aes(x = subcontinent, y = net_migr_rate, fill = continent)) +
+  geom_boxplot() +
+  facet_grid(cols = vars(continent),
+             scales = "free_x",
+             space = "free_x") +
+  labs(title = "Boxplots of net migration rates") +
+  ylab("net migration rate") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(
+          vjust = 1,
+          hjust = 1,
+          angle = 40
+        ))
+```
+
+**Conclusion:**
+
+Under the assumption that migration mostly happens among geographical
+neighbors, we can now for example see a migration pattern from Latin
+America and the Caribbean to Northern America, although the continents
+total migration is roughly centered. Also Australia and New Zealand is
+the only subcontinent with a positive net migration in Oceania.
+
+## f. Median net migration rate per subcontinent.
+
+The plot in task e. shows the distribution of the net migration rate for
+each subcontinent. Here you will work on visualizing only one summary
+statistic, namely the median.
+
+For each subcontinent, calculate the median net migration rate. Then
+create a plot which contains the sub-regions on the y-axis and the
+median net migration rate on the x-axis.
+
+- As geoms use points.
+
+- Color the points by continent -- use a colorblind friendly palette
+  (see e.g.,
+  [here](http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/)).
+
+- Rename the axes.
+
+- Using `fct_reorder` from the **forcats** package, arrange the levels
+  of subcontinent such that in the plot the lowest (bottom) subcontinent
+  contains the lowest median net migration rate and the upper most
+  region contains the highest median net migration rate.
+
+- Comment on the plot. E.g., what are the regions with the most influx?
+  What are the regions with the most outflux?
+
+```{r}
+data %>% group_by(subcontinent, continent) %>%
+  summarise(median_net_migr_rate = median(net_migr_rate, na.rm = TRUE),
+            .groups = "drop") %>%
+  mutate(subcontinent = fct_reorder(subcontinent, median_net_migr_rate)) %>%
+  ggplot(aes(x = median_net_migr_rate, y = subcontinent, color = continent)) +
+  geom_point(size = 2.5) +
+  labs(title = "Median net migration rate per subcontinent") +
+  xlab("median net migration rate") +
+  scale_color_viridis_d()
+
+```
+
+**Conclusion:**
+
+Australia and New Zealand, Western Europe, Northern Europe and Northern
+America have the highest median influx, while Micronesia and Polynesia
+the highest median outflux. We also use the viridis palette for a color
+blind friendly color selection.
+
+## g. Median youth unemployment rate per subcontinent
+
+For each subcontinent, calculate the median youth unemployment rate.
+Then create a plot which contains the sub-regions on the y-axis and the
+median unemployment rate on the x-axis.
+
+- Use a black and white theme (`?theme_bw()`)
+
+- As geoms use bars. (hint: pay attention to the statistical
+  transformation taking place in `geom_bar()` -- look into argument
+  `stat="identity"`)
+
+- Color the bars by continent -- use a colorblind friendly palette.
+
+- Make the bars transparent (use `alpha = 0.7`).
+
+- Rename the axes.
+
+- Using `fct_reorder` from the **forcats** package, arrange the levels
+  of subcontinent such that in the plot the lowest (bottom) subcontinent
+  contains the lowest median youth unemployment rate and the upper most
+  region contains the highest median youth unemployment rate.
+
+- Comment on the plot. E.g., what are the regions with the highest vs
+  lowest youth unemployment rate?
+
+```{r}
+data %>% group_by(subcontinent, continent) %>%
+  summarise(
+    median_youth_unempl_rate = median(youth_unempl_rate, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(subcontinent = fct_reorder(subcontinent, median_youth_unempl_rate)) %>%
+  ggplot(aes(x = median_youth_unempl_rate, y = subcontinent, fill = continent)) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  labs(title = "Median youth unemployment rate per subcontinent") +
+  xlab("median youth unemployment rate") +
+  theme_bw() +
+  scale_fill_viridis_d()
+
+```
+
+**Conclusion:**
+
+The *stat = "identity"* argument in *geom_bar()* makes it behave like
+geom_col(), where instead of counting the number of categories in the
+categorical variable, it takes a second numeric variable, which it maps
+onto the bars length.
+
+While Central, Eastern and South-eastern Asia have very low median youth
+unemployment rates, Northern Africa and Polynesia have the largest
+median youth unemployment rates.
+
+## h. Median youth unemployment rate per subcontinent -- with error bars
+
+The value displayed in the barplot in g. is the result of an
+aggregation, so it might be useful to also plot error bars, to have a
+general idea on how precise the median unemployment is. This can be
+achieved by plotting the error bars which reflect the standard deviation
+or the interquartile range of the variable in each of the subcontinents.
+
+Repeat the plot from Task g. but include also error bars which reflect
+the 25% and 75% quantiles. You can use `geom_errorbar` in **ggplot2**.
+
+```{r}
+data %>% group_by(subcontinent, continent) %>% 
+  summarise(median_youth_unempl_rate = median(youth_unempl_rate, na.rm = TRUE),
+            Q1 = quantile(youth_unempl_rate, 0.25, na.rm = TRUE),
+            Q3 = quantile(youth_unempl_rate, 0.75, na.rm = TRUE), .groups = "drop") %>%
+  mutate(subcontinent = fct_reorder(subcontinent, median_youth_unempl_rate)) %>%
+ggplot(aes(x = median_youth_unempl_rate, y = subcontinent, fill = continent)) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  geom_errorbar(aes(xmin= Q1, xmax = Q3), width = 0.5) +
+  labs(title = "Median youth unemployment rate per subcontinent") +
+  xlab("median youth unemployment rate") +
+  theme_bw() +
+  scale_fill_viridis_d()
+```
+
+**Conclusion:**
+
+The error bars show that the spread of youth unemployment differs
+strongly between subcontinents. Some regions, such as Sub-Saharan Africa
+and Polynesia, have relatively wide interquartile ranges, while others,
+such as Australia and New Zealand, show little variation.
+
+## i. Relationship between education expenditure and net migration rate
+
+Using **ggplot2**, create a plot showing the relationship between
+education expenditure and net migration rate.
+
+- Color the geoms based on the income status.
+
+- Add a regression line for each development status (using
+  `geom_smooth()`).
+
+Comment on the plot. Do you see any relationship between the two
+variables? Do you see any difference among the income levels?
+
+```{r}
+ggplot(data,
+       aes(x = expenditure, y = net_migr_rate, color = income_status)) +
+  geom_jitter(alpha = 0.6, na.rm = TRUE) +
+  geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    fullrange = TRUE,
+    alpha = 0.6,
+    linewidth = 0.4,
+    na.rm = TRUE) +
+  coord_cartesian(ylim = c(-20, 20)) +
+  labs(
+    title = "Relationship between education expenditure and net migration rate",
+    x = "Education expenditure (% of GDP)",
+    y = "Net migration rate",
+    color = "Income Status") +
+  theme_bw() 
+```
+
+**Conclusion:**
+
+We set the y limits to -20 and 20 to make the plot more readable,
+(Lebanon and Syria are extreme outliers as previously seen in the
+boxplots). There seems to not be a strong relationship between education
+expenditure and net migration rate. The observations show a lot of
+variability across all levels of education expenditure. For high-income
+and lower-middle-income countries, the fitted lines indicate a slight
+downward trend, while upper-middle-income countries show a slightly
+positive trend. However, these differences should not be
+overinterpreted, since the data are highly scattered and the fitted
+lines are influenced by the outliers.
+
+## j. Relationship between youth unemployment and net migration rate
+
+Create a plot as in Task i. but for youth unemployment and net migration
+rate. Comment briefly.
+
+```{r}
+ggplot(data,
+       aes(x = youth_unempl_rate, y = net_migr_rate, color = income_status)) +
+  geom_jitter(alpha = 0.6, na.rm = TRUE) +
+  geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    fullrange = TRUE,
+    alpha = 0.6,
+    linewidth = 0.4,
+    na.rm = TRUE
+  ) + coord_cartesian(ylim = c(-20, 20)) +
+  labs(
+    title = "Relationship between youth unemployment and net migration rate",
+    x = "Youth Unemployment Rate",
+    y = "Net migration rate",
+    color = "Income Status"
+  ) +
+  theme_bw() 
+```
+
+**Conclusion:**
+
+We set the y limits to -20 and 20 to make the plot more readable, since
+Lebanon and Syria are extreme outliers as previously seen in the
+boxplots. Overall, there does not seem to be a strong relationship
+between youth unemployment and net migration rate. Most observations are
+concentrated at lower youth unemployment rates and around net migration
+rates close to zero. The fitted lines for high-, upper-middle- and
+lower-middle-income countries show only a slight downward trend. For
+low-income countries, the fitted line seems to increases, but there are
+still comparatively few observations in this group. Overall, the
+relationship appears weak and highly variable.
+
+## k. Merging population data
+
+Go online and find a data set which contains the 2020 population for the
+countries of the world together with ISO codes.
+
+- Download this data and merge it to the dataset you are working on in
+  this case study using a left join. (A possible source: [World
+  Bank](https://data.worldbank.org/indicator/SP.POP.TOTL?end=2020&start=2020)))
+
+- Inspect the data and check whether the join worked well.
+
+First we import the dataset and convert it to a tidy format:
+
+```{r}
+population_url <- paste0(
+  "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL",
+  "?format=json&date=2020&per_page=20000"
+)
+
+population_json <- jsonlite::fromJSON(population_url)
+
+population_data_20 <- as_tibble(population_json[[2]]) %>%
+  transmute(
+    ISO3 = countryiso3code,
+    population2020 = value
+  ) %>%
+  filter(!is.na(ISO3), ISO3 != "", !is.na(population2020)) %>%
+  distinct(ISO3, .keep_all = TRUE)
+
+glimpse(population_data_20)
+```
+
+Next we perform the left join with our current data:
+
+```{r}
+data <- left_join(data, population_data_20, by = "ISO3")
+
+glimpse(data)
+
+data %>%
+  filter(is.na(population2020)) %>%
+  select(country, ISO3, continent)
+```
+
+**Conclusion:**
+
+We have successfully added the population2020 column for all columns
+that were already present in our data except for the country Taiwan due
+to it not being matched and still having missing values in population
+2020.
+
+## l. Scatterplot of education expenditure and net migration rate in Europe
+
+Make a scatterplot of education expenditure and net migration rate for
+the countries of Europe.
+
+- Scale the size of the points according to each country's population.
+
+- For better visibility, use a transparency of `alpha=0.7`.
+
+- Remove the legend.
+
+- Comment on the plot.
+
+```{r}
+data %>% filter(continent == "Europe" & !is.na(expenditure)) %>%
+  ggplot(aes(x = expenditure, y = net_migr_rate, 
+             size = population2020)) +
+  geom_point(alpha = 0.7, 
+             color = "darkblue") +
+  labs(title = "Net migration vs. education expenditure in Europe",
+       y = "Net migration rate", 
+       x = "Education expenditure") +
+  guides(size = "none")
+```
+
+**Conclusion:**
+
+One visible trend is that net migration rate increases with education
+expenditure. All the countries with the most education spending lie in
+the positive midfield of net migration rate. The most populated
+countries in Europe all seem to have a education expenditure between 4
+and 6.
+
+## m. Interactive plot
+
+On the merged data set from Task k., using function `ggplotly` from
+package **plotly**\
+re-create the scatterplot in Task l., but this time for all countries.
+Color the points according to their continent.
+
+When hovering over the points the name of the country, the values for
+education expenditure, net migration rate, and population should be
+shown. (Hint: use the aesthetic `text = Country`. In `ggplotly` use the
+argument `tooltip = c("text", "x", "y", "size")`).
+
+**Hint:** If you are creating a .pdf file, keep in mind that PDF output
+is static and does not support HTML widgets. To avoid build errors, you
+can wrap interactive plots in a conditional check or set the chunk
+option `eval=FALSE`. Alternatively, you can use the **webshot** package
+to automatically convert interactive elements into static images during
+the knit process.
+
+```{r eval=FALSE}
+plot_m <- ggplot(
+  data,
+  aes(
+    y = net_migr_rate,
+    x = expenditure,
+    size = population2020,
+    color = continent,
+    text = country
+  )
+) + geom_point(alpha = 0.7) + labs(
+  title = "Net migration vs. education expenditure in the World",
+  x = "Education expenditure",
+  y = "Net migration rate",
+  color = "Continent"
+) + guides(size = "none") 
+ggplotly(plot_m, tooltip = c("text", "x", "y", "size"))
+```
+
+**Conclusion:**
+
+For analysis purposus we did not remove the outliers as in task i. We
+can now clearly and quickly see which countries produce interesting
+results.
+
+## n. Parallel coordinate plot
+
+In **parallel coordinate plots** each observation or data point is
+depicted as a line traversing a series of parallel axes, corresponding
+to a specific variable or dimension. It is often used for identifying
+clusters in the data.
+
+One can create such a plot using the **GGally** R package. You should
+create such a plot where you look at the three main variables in the
+data set: education expenditure, youth unemployment rate and net
+migration rate. Color the lines based on the income status. Briefly
+comment.
+
+```{r}
+ggparcoord(
+  data,
+  columns = c(8, 9, 7),
+  groupColumn = 6,
+  alphaLines = 0.6,
+  showPoints = TRUE,
+  scale  = "std"
+)   +
+  theme_bw() 
+```
+
+**Conclusion:**
+
+In a parallel coordinates plot, each observation is represented by a
+single line connecting all the measured values. We standardized the
+values for better comparison across collumns. Parallel lines indicate
+positive correlation between observations (e.g. countries in our case),
+while lines crossing in a "X" shape indicate negative correlation. Most
+noticably, there is a visble clustering of high income countries with
+high education expenditure, low youth unemployment and positive net
+migration. On the other hand, low income countries seem to cluster
+around low education expenditure, high youth unemployment and negative
+net migration. The middle income groups are more mixed but still show a
+tendency towards the same direction as the high and low income groups,
+respectivly.
+
+## o. World map visualisation
+
+Create a world map of the education expenditure per country. You can use
+the vignette
+<https://cran.r-project.org/web/packages/rworldmap/vignettes/rworldmap.pdf>
+to find how to do this in R. Alternatively, you can use other packages
+(such as **ggplot2**, **sf** and **rnaturalearthdata**) to create a map.
+
+```{r}
+sPDF <- joinCountryData2Map(
+  data,
+  joinCode = "ISO3",
+  nameJoinColumn = "ISO3",
+  verbose = TRUE
+)
+par(mai = c(0, 0, 0.2, 0),
+    xaxs = "i",
+    yaxs = "i")
+mapParams <- mapCountryData(
+  sPDF,
+  nameColumnToPlot = "expenditure" ,
+  mapTitle = "Education expenditure (% of GDP) in 2020",
+  catMethod = "quantiles",
+  colourPalette = "topo",
+  addLegend = FALSE
+)
+
+do.call(
+  addMapLegend,
+  c(
+    mapParams,
+    legendWidth = 0.5,
+    legendLabels = "all",
+    legendIntervals = "page",
+    legendMar = 2
+  )
+)
+```
+
+**Conclusion:**
+
+We follow the guide in the vignete and plot a world map of education
+expenditure. In joining the data, only Gibraltar failed, which is no big
+problem!
